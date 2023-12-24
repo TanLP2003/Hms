@@ -1,7 +1,7 @@
 package introse.group20.hms.infracstructure.models;
 
 
-import introse.group20.hms.infracstructure.models.enums.StayType;
+import introse.group20.hms.core.entities.enums.StayType;
 import jakarta.persistence.*;
 import jdk.jfr.DataAmount;
 import lombok.Data;
@@ -24,9 +24,11 @@ public class MedicalRecordModel {
     private String inDayDiagnose;
     @Column(length = 1000)
     private String outDayDiagnose;
-    @Lob
+//    @Lob
+    @Column(length = 1000)
     private String medicalHistory;
-    @Lob
+//    @Lob
+    @Column(length = 1000)
     private String diseaseProgress;
     @Column(length = 1000)
     private String testResults;
@@ -36,13 +38,13 @@ public class MedicalRecordModel {
     private StayType stayType;
     @Column(length = 1000)
     private String note;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id")
     private PatientModel patient;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "department_id")
     private DepartmentModel department;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id")
     private DoctorModel doctor;
 }
