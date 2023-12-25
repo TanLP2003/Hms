@@ -4,9 +4,12 @@ import introse.group20.hms.application.adapters.IPostAdapter;
 import introse.group20.hms.application.services.interfaces.IPostService;
 import introse.group20.hms.core.entities.Post;
 import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
+import org.apache.logging.log4j.message.StringFormattedMessage;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 
 public class PostService implements IPostService {
     private IPostAdapter postAdapter;
@@ -20,17 +23,21 @@ public class PostService implements IPostService {
 
     @Override
     public List<Post> getPostOfDoctor(UUID doctorId) {
-        return null;
+        return postAdapter.getPostOfDoctorAdapter(doctorId);
     }
 
     @Override
     public List<Post> getPostByCategory(UUID categoryId) {
-        return null;
+        return postAdapter.getPostByCategoryAdapter(categoryId);
     }
 
     @Override
-    public Post getPostById(UUID postId) {
-        return null;
+    public Post getPostById(UUID postId) throws NotFoundException {
+        Optional<Post> postOptional = postAdapter.getPostByIdAdapter(postId);
+        if (postOptional.isPresent()){
+            return postOptional.get();
+        }
+        else throw new NotFoundException(String.format("Cannot find post with id %s",postId));
     }
 
     @Override
@@ -41,11 +48,11 @@ public class PostService implements IPostService {
 
     @Override
     public void updatePost(Post post) {
-
+        postAdapter.updatePostAdapter(post);
     }
 
     @Override
     public void deletePost(UUID postId) {
-
+        postAdapter.deletePostAdapter(postId);
     }
 }

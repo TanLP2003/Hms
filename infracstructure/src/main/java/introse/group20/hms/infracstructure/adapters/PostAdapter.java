@@ -5,6 +5,7 @@ import introse.group20.hms.core.entities.Category;
 import introse.group20.hms.core.entities.Doctor;
 import introse.group20.hms.core.entities.Post;
 import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
 import introse.group20.hms.infracstructure.models.CategoryModel;
 import introse.group20.hms.infracstructure.models.DoctorModel;
 import introse.group20.hms.infracstructure.models.PostModel;
@@ -14,6 +15,7 @@ import introse.group20.hms.infracstructure.repositories.IPostRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.dynamic.DynamicType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,17 +46,28 @@ public class PostAdapter implements IPostAdapter {
 
     @Override
     public List<Post> getPostOfDoctorAdapter(UUID doctorId) {
-        return null;
+        List<PostModel> postModels = postRepository.findByDoctorId(doctorId);
+        return postModels.stream()
+                .map(postModel -> modelMapper.map(postModel, Post.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Post> getPostByCategoryAdapter(UUID categoryId) {
-        return null;
+        List<PostModel> postModels = postRepository.findByCategoryId(categoryId);
+        return postModels.stream()
+                .map(postModel -> modelMapper.map(postModel, Post.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Post> getPostByIdAdapter(UUID postId) {
-        return Optional.empty();
+    public Optional<Post> getPostByIdAdapter(UUID postId) throws NotFoundException {
+        Optional<PostModel> postOptional = postRepository.findById(postId);
+        if (postOptional.isPresent()){
+            Post post = modelMapper.map(postOptional.get(),Post.class);
+            return Optional.of(post);
+        }
+        else return Optional.empty();
     }
 
     @Override
@@ -87,11 +100,12 @@ public class PostAdapter implements IPostAdapter {
 
     @Override
     public void updatePostAdapter(Post post) {
-
+        PostModel postModel = modelMapper.map(post, PostModel.class);
+        postRepository.save(postModel);
     }
 
     @Override
     public void deletePostAdapter(UUID postId) {
-
+        postRepository.deleteById(postId);
     }
 }

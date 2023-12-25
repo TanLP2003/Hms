@@ -4,6 +4,7 @@ import introse.group20.hms.application.services.interfaces.IPostService;
 import introse.group20.hms.application.services.uploads.IUploadService;
 import introse.group20.hms.core.entities.Post;
 import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
 import introse.group20.hms.webapi.DTOs.PostDTO.PostRequest;
 import introse.group20.hms.webapi.DTOs.PostDTO.PostResponse;
 import introse.group20.hms.webapi.DTOs.constants.DefaultImage;
@@ -44,23 +45,34 @@ public class PostController {
         return new ResponseEntity<List<PostResponse>>(postDTOS,HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/posts/doctor", name = "getByDoctor")
-//    //route: /posts/doctor?doctorId=<id of doctor>
-//    public ResponseEntity<List<PostResponse>> getPostOfDoctor(@RequestParam UUID doctorId){
-//
-//    }
+    @GetMapping(value = "/posts/doctor", name = "getByDoctor")
+    //route: /posts/doctor?doctorId=<id of doctor>
+    public ResponseEntity<List<PostResponse>> getPostOfDoctor(@RequestParam UUID doctorId){
+        List<Post> posts = postService.getPostOfDoctor(doctorId);
+        List<PostResponse> postDTOS = posts.stream()
+                .map(post -> modelMapper.map(post,PostResponse.class))
+                .collect(Collectors.toList());
+        return new ResponseEntity<List<PostResponse>>(postDTOS,HttpStatus.OK);
+    }
 
-//    @GetMapping(value = "/category", name = "getByCategory")
-//        //route: /posts/category?categoryId=<if of category>
-//    public ResponseEntity<List<PostResponse>> getPostOfCategory(@RequestParam UUID categoryId){
+    @GetMapping(value = "/posts/category", name = "getByCategory")
+        //route: /posts/category?categoryId=<if of category>
+    public ResponseEntity<List<PostResponse>> getPostOfCategory(@RequestParam UUID categoryId){
+        List<Post> posts = postService.getPostOfDoctor(categoryId);
+        List<PostResponse> postDTOS = posts.stream()
+                .map(post -> modelMapper.map(post,PostResponse.class))
+                .collect(Collectors.toList());
+        return new ResponseEntity<List<PostResponse>>(postDTOS,HttpStatus.OK);
+    }
 //
-//    }
-////
-//    @GetMapping(value = "/{postId}", name = "getByPostId")
-//    public ResponseEntity<PostResponse> getPostById(@PathVariable UUID postId){
-//
-//    }
-//
+    @GetMapping(value = "/posts/{postId}", name = "getByPostId")
+        //route: /posts/{postId}
+    public ResponseEntity<PostResponse> getPostById(@PathVariable UUID postId) throws NotFoundException {
+        Post posts = postService.getPostById(postId);
+        PostResponse postResponse = modelMapper.map(posts, PostResponse.class);
+        return new ResponseEntity<PostResponse>(postResponse,HttpStatus.OK);
+    }
+
     @PostMapping(value = "/api/posts", name = "createPost", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("DOCTOR")
     public ResponseEntity<PostResponse> createPost(@Valid @ModelAttribute PostRequest postRequest) throws IOException,BadRequestException {
@@ -76,16 +88,20 @@ public class PostController {
         PostResponse postResponse = modelMapper.map(newPost, PostResponse.class);
         return new ResponseEntity<PostResponse>(postResponse,HttpStatus.CREATED);
     }
-//
-//    @PutMapping("/{postId}")
-//    @Secured("DOCTOR")
-//    public ResponseEntity<HttpStatus> updatePost(@Valid @RequestBody PostRequest postRequest){
-//
-//    }
-//
-//    @DeleteMapping("/{postId}")
-//    @Secured("DOCTOR")
-//    public ResponseEntity<HttpStatus> deletePost(@PathVariable UUID postId) {
-//
-//    }
+
+    @PutMapping("/api/posts/{postId}")
+    @Secured("DOCTOR")
+    public ResponseEntity<HttpStatus> updatePost(@PathVariable UUID postId, @Valid @RequestBody PostRequest postRequest){
+        Post post = modelMapper.map(postRequest, Post.class);
+        post.setId(postId);
+        postService.updatePost(post);
+        return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/posts/{postId}")
+    @Secured("DOCTOR")
+    public ResponseEntity<HttpStatus> deletePost(@PathVariable UUID postId) {
+        postService.deletePost(postId);
+        return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+    }
 }
