@@ -1,6 +1,7 @@
 package introse.group20.hms.application.adapters;
 
 import introse.group20.hms.core.entities.Post;
+import introse.group20.hms.core.exceptions.BadRequestException;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,7 @@ public interface IPostAdapter {
     List<Post> getPostOfDoctorAdapter(UUID doctorId);
     List<Post> getPostByCategoryAdapter(UUID categoryId);
     Optional<Post> getPostByIdAdapter(UUID postId);
-    Post createPostAdapter(UUID doctorId, Post post);
+    Post createPostAdapter(UUID doctorId, UUID CategoryID, Post post) throws BadRequestException;
     void updatePostAdapter(Post post);
     void deletePostAdapter(UUID postId);
 }

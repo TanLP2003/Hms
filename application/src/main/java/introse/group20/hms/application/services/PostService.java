@@ -1,15 +1,21 @@
 package introse.group20.hms.application.services;
 
+import introse.group20.hms.application.adapters.IPostAdapter;
 import introse.group20.hms.application.services.interfaces.IPostService;
 import introse.group20.hms.core.entities.Post;
+import introse.group20.hms.core.exceptions.BadRequestException;
 
 import java.util.List;
 import java.util.UUID;
 
 public class PostService implements IPostService {
+    private IPostAdapter postAdapter;
+    public  PostService(IPostAdapter postAdapter){
+        this.postAdapter = postAdapter;
+    }
     @Override
     public List<Post> getAll() {
-        return null;
+        return postAdapter.getAllAdapter();
     }
 
     @Override
@@ -28,8 +34,8 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Post createPost(UUID doctorId, UUID categoryId, Post post) {
-        return null;
+    public Post createPost(UUID doctorId, UUID categoryId, Post post) throws BadRequestException{
+        return postAdapter.createPostAdapter(doctorId,categoryId,post);
     }
 
 
