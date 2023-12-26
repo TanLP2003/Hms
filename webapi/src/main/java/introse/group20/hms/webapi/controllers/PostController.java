@@ -12,6 +12,7 @@ import introse.group20.hms.webapi.utils.AuthExtensions;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Null;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -58,7 +59,7 @@ public class PostController {
     @GetMapping(value = "/posts/category", name = "getByCategory")
         //route: /posts/category?categoryId=<if of category>
     public ResponseEntity<List<PostResponse>> getPostOfCategory(@RequestParam UUID categoryId){
-        List<Post> posts = postService.getPostOfDoctor(categoryId);
+        List<Post> posts = postService.getPostByCategory(categoryId);
         List<PostResponse> postDTOS = posts.stream()
                 .map(post -> modelMapper.map(post,PostResponse.class))
                 .collect(Collectors.toList());
@@ -89,10 +90,14 @@ public class PostController {
         return new ResponseEntity<PostResponse>(postResponse,HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/posts/{postId}")
+    @PutMapping(value = "/api/posts/{postId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> updatePost(@PathVariable UUID postId, @Valid @RequestBody PostRequest postRequest){
+    public ResponseEntity<HttpStatus> updatePost(@PathVariable UUID postId, @Valid @ModelAttribute PostRequest postRequest) throws IOException, NotFoundException {
         Post post = modelMapper.map(postRequest, Post.class);
+        if (postRequest.getCover() != null && !postRequest.getCover().isEmpty()){
+            post.setCover(uploadService.upload(postRequest.getCover().getBytes(), postRequest.getCover().getOriginalFilename(),"postCovers"));
+        }
+        else post.setCover(null);
         post.setId(postId);
         postService.updatePost(post);
         return new ResponseEntity<HttpStatus>(HttpStatus.OK);
@@ -102,6 +107,6 @@ public class PostController {
     @Secured("DOCTOR")
     public ResponseEntity<HttpStatus> deletePost(@PathVariable UUID postId) {
         postService.deletePost(postId);
-        return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+        return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
     }
 }

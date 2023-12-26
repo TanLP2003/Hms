@@ -47,7 +47,7 @@ public class PostService implements IPostService {
 
 
     @Override
-    public void updatePost(Post post) {
+    public void updatePost(Post post) throws NotFoundException {
         postAdapter.updatePostAdapter(post);
     }
 

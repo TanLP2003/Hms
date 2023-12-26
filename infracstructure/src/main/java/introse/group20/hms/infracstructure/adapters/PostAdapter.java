@@ -13,9 +13,10 @@ import introse.group20.hms.infracstructure.repositories.ICategoryRepository;
 import introse.group20.hms.infracstructure.repositories.IDoctorRepository;
 import introse.group20.hms.infracstructure.repositories.IPostRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.hibernate.annotations.DynamicUpdate;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.dynamic.DynamicType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -99,9 +100,18 @@ public class PostAdapter implements IPostAdapter {
     }
 
     @Override
-    public void updatePostAdapter(Post post) {
+    @Transactional
+    public void updatePostAdapter(Post post) throws NotFoundException {
         PostModel postModel = modelMapper.map(post, PostModel.class);
-        postRepository.save(postModel);
+        Optional<PostModel> existPostModel = postRepository.findById(post.getId());
+        if (existPostModel.isPresent()){
+            if (postModel.getCover() == null){
+                postModel.setCover(existPostModel.get().getCover());
+            }
+            postRepository.save(postModel);
+        }
+        else throw new NotFoundException("Not found post with id " + post.getId());
+
     }
 
     @Override

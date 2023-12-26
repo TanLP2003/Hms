@@ -14,6 +14,6 @@ public interface IPostAdapter {
     List<Post> getPostByCategoryAdapter(UUID categoryId);
     Optional<Post> getPostByIdAdapter(UUID postId) throws NotFoundException;
     Post createPostAdapter(UUID doctorId, UUID CategoryID, Post post) throws BadRequestException;
-    void updatePostAdapter(Post post);
+    void updatePostAdapter(Post post) throws NotFoundException;
     void deletePostAdapter(UUID postId);
 }

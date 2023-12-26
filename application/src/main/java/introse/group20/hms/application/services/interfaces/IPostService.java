@@ -13,6 +13,6 @@ public interface IPostService {
     List<Post> getPostByCategory(UUID categoryId);
     Post getPostById(UUID postId) throws NotFoundException;
     Post createPost(UUID doctorId, UUID categoryId, Post post) throws BadRequestException;
-    void updatePost(Post post);
+    void updatePost(Post post) throws NotFoundException;
     void deletePost(UUID postId);
 }
