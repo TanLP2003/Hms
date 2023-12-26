@@ -1,7 +1,6 @@
 package introse.group20.hms.infracstructure.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
