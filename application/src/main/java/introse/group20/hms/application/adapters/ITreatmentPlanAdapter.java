@@ -11,6 +11,6 @@ public interface ITreatmentPlanAdapter {
     List<TreatmentPlan> getForUserAdapter(UUID userId);
     Optional<TreatmentPlan> getByIdAdapter(UUID id);
     void createTreatmentPlanAdapter(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException;
-    void updateTreatmentPlanAdapter(TreatmentPlan treatmentPlan);
-    void deleteTreatmentPlanAdapter(UUID id);
+    void updateTreatmentPlanAdapter(TreatmentPlan treatmentPlan) throws BadRequestException;
+    void deleteTreatmentPlanAdapter(UUID id) throws BadRequestException;
 }
