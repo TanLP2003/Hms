@@ -51,20 +51,22 @@ public class TreatmentPlanController {
 
     @PostMapping
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> createTreatmentPlan(@Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
+    public ResponseEntity<TreatmentPlanResponse> createTreatmentPlan(@Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
         UUID doctorId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         TreatmentPlan treatmentPlan = modelMapper.map(request, TreatmentPlan.class);
-        treatmentPlanService.createTreatmentPlan(request.getPatientId(), doctorId, treatmentPlan);
-        return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
+        TreatmentPlan newTreatmentPlan = treatmentPlanService.createTreatmentPlan(request.getPatientId(), doctorId, treatmentPlan);
+        TreatmentPlanResponse treatmentPlanResponse = modelMapper.map(newTreatmentPlan, TreatmentPlanResponse.class);
+        return new ResponseEntity<>(treatmentPlanResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> updateTreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest treatmentPlanRequest) throws BadRequestException {
+    public ResponseEntity<TreatmentPlanResponse> updateTreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest treatmentPlanRequest) throws BadRequestException {
         TreatmentPlan treatmentPlan = modelMapper.map(treatmentPlanRequest, TreatmentPlan.class);
         treatmentPlan.setId(id);
-        treatmentPlanService.updateTreatmentPlan(treatmentPlan);
-        return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+        TreatmentPlan updatedTreatmentPlan = treatmentPlanService.updateTreatmentPlan(treatmentPlan);
+        TreatmentPlanResponse treatmentPlanResponse = modelMapper.map(updatedTreatmentPlan, TreatmentPlanResponse.class);
+        return new ResponseEntity<>(treatmentPlanResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

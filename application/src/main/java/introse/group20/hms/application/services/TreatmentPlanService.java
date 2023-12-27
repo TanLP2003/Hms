@@ -33,8 +33,8 @@ public class TreatmentPlanService implements ITreatmentPlanService {
     }
 
     @Override
-    public void createTreatmentPlan(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
-        iTreatmentPlanAdapter.createTreatmentPlanAdapter(patientId, doctorId, treatmentPlan);
+    public TreatmentPlan createTreatmentPlan(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
+        return iTreatmentPlanAdapter.createTreatmentPlanAdapter(patientId, doctorId, treatmentPlan);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class TreatmentPlanService implements ITreatmentPlanService {
     }
 
     @Override
-    public void updateTreatmentPlan(TreatmentPlan treatmentPlan) throws BadRequestException {
-        iTreatmentPlanAdapter.updateTreatmentPlanAdapter(treatmentPlan);
+    public TreatmentPlan updateTreatmentPlan(TreatmentPlan treatmentPlan) throws BadRequestException {
+        return iTreatmentPlanAdapter.updateTreatmentPlanAdapter(treatmentPlan);
     }
 }

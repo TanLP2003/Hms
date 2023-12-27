@@ -49,7 +49,7 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
     }
 
     @Override
-    public void createTreatmentPlanAdapter(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
+    public TreatmentPlan createTreatmentPlanAdapter(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
         TreatmentPlanModel treatmentPlanModel = modelMapper.map(treatmentPlan, TreatmentPlanModel.class);
         Optional<PatientModel> patientModel = patientRepository.findById(patientId);
         Optional<DoctorModel> doctorModel = doctorRepository.findById(doctorId);
@@ -59,11 +59,12 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
         }
         treatmentPlanModel.setDoctor(doctorModel.get());
         treatmentPlanModel.setPatient(patientModel.get());
-        treatmentPlanRepository.save(treatmentPlanModel);
+        TreatmentPlanModel savedTreatmentModel = treatmentPlanRepository.save(treatmentPlanModel);
+        return modelMapper.map(savedTreatmentModel, TreatmentPlan.class);
     }
 
     @Override
-    public void updateTreatmentPlanAdapter(TreatmentPlan treatmentPlan) throws BadRequestException {
+    public TreatmentPlan updateTreatmentPlanAdapter(TreatmentPlan treatmentPlan) throws BadRequestException {
         Optional<TreatmentPlanModel> treatmentPlanModel = treatmentPlanRepository.findById(treatmentPlan.getId());
         if(treatmentPlanModel.isEmpty()){
             throw new BadRequestException("treatmentPlanId Not Found!");
@@ -80,6 +81,7 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
         updatedTreatmentPlanModel.setNextExpectedExaminationDay(treatmentPlan.getNextExpectedExaminationDay());
         updatedTreatmentPlanModel.setNote(treatmentPlan.getNote());
         treatmentPlanRepository.save(updatedTreatmentPlanModel);
+        return modelMapper.map(updatedTreatmentPlanModel, TreatmentPlan.class);
     }
 
     @Override
