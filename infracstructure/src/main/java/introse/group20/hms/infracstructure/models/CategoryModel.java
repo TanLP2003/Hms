@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @Entity
 @Data
@@ -16,6 +17,11 @@ public class CategoryModel {
     @GeneratedValue
     private UUID id;
     private String name;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.MERGE)
     private List<PostModel> posts;
+
+    public CategoryModel(String name){
+        this.name = name;
+    }
+
 }
