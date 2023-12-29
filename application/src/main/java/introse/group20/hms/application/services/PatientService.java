@@ -4,6 +4,8 @@ import introse.group20.hms.application.adapters.IPatientAdapter;
 import introse.group20.hms.application.services.interfaces.IPatientService;
 import introse.group20.hms.core.entities.Patient;
 import introse.group20.hms.core.entities.User;
+import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,8 +22,9 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public Patient getPatientById(UUID id) {
-        return null;
+    public Patient getPatientById(UUID id) throws NotFoundException {
+        return patientAdapter.getPatientByIdAdapter(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Patient with id: %s not exist", id)));
     }
 
     @Override
@@ -41,7 +44,7 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public void updatePatient(Patient patient) {
-
+    public void updatePatient(Patient patient) throws BadRequestException {
+        patientAdapter.updatePatientAdapter(patient);
     }
 }

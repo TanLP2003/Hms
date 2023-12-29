@@ -18,6 +18,12 @@ public class PrescriptionModel {
     private Date createdDay;
     @Column(length = 500)
     private String note;
-    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MedicineModel> medicines;
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private PatientModel patient;
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private DoctorModel doctor;
 }

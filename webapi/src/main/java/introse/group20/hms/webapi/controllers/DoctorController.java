@@ -1,6 +1,7 @@
 package introse.group20.hms.webapi.controllers;
 
 import introse.group20.hms.application.services.interfaces.IDoctorService;
+import introse.group20.hms.application.services.interfaces.ISendSmsService;
 import introse.group20.hms.application.services.interfaces.IUserService;
 import introse.group20.hms.application.services.uploads.IUploadService;
 import introse.group20.hms.core.entities.Doctor;
@@ -36,6 +37,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Validated
 public class DoctorController {
     @Autowired
+    private ISendSmsService smsService;
+    @Autowired
     private IDoctorService doctorService;
     @Autowired
     private ModelMapper modelMapper;
@@ -61,6 +64,7 @@ public class DoctorController {
         modelMapper.map(doctorRequest, doctor);
         User user = doctorService.addDoctor(doctorRequest.getDepartmentId(), doctor);
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+//        smsService.sendSms(userDTO.getUsername(), userDTO.getPassword());
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }
     @GetMapping("/doctors")

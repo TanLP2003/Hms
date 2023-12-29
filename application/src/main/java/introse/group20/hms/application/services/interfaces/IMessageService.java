@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IMessageService {
-    List<Message> getConversation(UUID patientId, UUID doctorId);
-    Message SendMessage(UUID doctorId, UUID patientId, Message message);
-    Message getLatestMessage(UUID doctorId, UUID patientId);
+    List<Message> getConversation(UUID senderId, UUID receiverId);
+    Message saveMessage(Message message);
+//    Message SendMessage(UUID doctorId, UUID patientId, Message message);
+//    Message getLatestMessage(UUID doctorId, UUID patientId);
 }

@@ -14,13 +14,9 @@ public class MessageModel {
     @Id
     @GeneratedValue
     private UUID id;
-    private Date time;
-    @Column(length = 500)
+    private UUID conversationId;
+    private UUID senderId;
+    private UUID receiverId;
     private String content;
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private PatientModel patient;
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private DoctorModel doctor;
+    private Date time;
 }

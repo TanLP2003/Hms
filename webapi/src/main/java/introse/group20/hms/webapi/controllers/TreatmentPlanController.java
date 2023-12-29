@@ -1,8 +1,10 @@
 package introse.group20.hms.webapi.controllers;
 
+import introse.group20.hms.application.services.TreatmentPlanService;
 import introse.group20.hms.application.services.interfaces.ITreatmentPlanService;
 import introse.group20.hms.core.entities.TreatmentPlan;
 import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
 import introse.group20.hms.webapi.DTOs.TreatmentPlanDTO.TreatmentPlanRequest;
 import introse.group20.hms.webapi.DTOs.TreatmentPlanDTO.TreatmentPlanResponse;
 import introse.group20.hms.webapi.utils.AuthExtensions;
@@ -35,35 +37,54 @@ public class TreatmentPlanController {
     public ResponseEntity<List<TreatmentPlanResponse>> getForPatient(@RequestParam UUID patientId){
         List<TreatmentPlan> treatmentPlans = treatmentPlanService.getForUser(patientId);
         List<TreatmentPlanResponse> treatmentPlanResponses = treatmentPlans.stream()
-                .map(treatmentPlan -> modelMapper.map(treatmentPlan, TreatmentPlanResponse.class))
+                .map(this::mapToTreatmentPlanResponse)
                 .collect(Collectors.toList());
         return new ResponseEntity<List<TreatmentPlanResponse>>(treatmentPlanResponses, HttpStatus.OK);
     }
 
-//    @GetMapping("/{id}")
-//    @Secured({"DOCTOR", "PATIENT"})
-//    public ResponseEntity<TreatmentPlanResponse> getById(@PathVariable UUID id){
-//
-//    }
+    @GetMapping("/{id}")
+    @Secured({"DOCTOR", "PATIENT"})
+    public ResponseEntity<TreatmentPlanResponse> getById(@PathVariable UUID id) throws NotFoundException {
+        TreatmentPlan treatmentPlan = treatmentPlanService.getById(id);
+        return ResponseEntity.ok(mapToTreatmentPlanResponse(treatmentPlan));
+    }
 //
     @PostMapping
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> createTreatmentPlan(@Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
+    public ResponseEntity<TreatmentPlanResponse> createTreatmentPlan(@Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
         UUID doctorId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         TreatmentPlan treatmentPlan = modelMapper.map(request, TreatmentPlan.class);
-        treatmentPlanService.createTreatmentPlan(request.getPatientId(), doctorId, treatmentPlan);
-        return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
+        TreatmentPlan savedTp = treatmentPlanService.createTreatmentPlan(request.getPatientId(), doctorId, treatmentPlan);
+        return new ResponseEntity<>(mapToTreatmentPlanResponse(savedTp), HttpStatus.CREATED);
     }
 
-//    @PutMapping("/{id}")
-//    @Secured("DOCTOR")
-//    public ResponseEntity<HttpStatus> updateTreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest){
-//
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    @Secured("DOCTOR")
-//    public ResponseEntity<HttpStatus> deleteTreatmentPlan(@PathVariable UUID id){
-//
-//    }
+    @PutMapping("/{id}")
+    @Secured("DOCTOR")
+    public ResponseEntity<HttpStatus> updateTreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
+        TreatmentPlan treatmentPlan = modelMapper.map(request, TreatmentPlan.class);
+        treatmentPlan.setId(id);
+        treatmentPlanService.updateTreatmentPlan(treatmentPlan);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @Secured("DOCTOR")
+    public ResponseEntity<HttpStatus> deleteTreatmentPlan(@PathVariable UUID id) throws BadRequestException {
+        treatmentPlanService.deleteTreatmentPlan(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private TreatmentPlanResponse mapToTreatmentPlanResponse(TreatmentPlan treatmentPlan){
+        return new TreatmentPlanResponse(
+                treatmentPlan.getId(),
+                treatmentPlan.getDoctor().getId(),
+                treatmentPlan.getDoctor().getName(),
+                treatmentPlan.getPatient().getId(),
+                treatmentPlan.getPatient().getName(),
+                treatmentPlan.getTreatmentMethod(),
+                treatmentPlan.getLastExaminationDay(),
+                treatmentPlan.getNextExpectedExaminationDay(),
+                treatmentPlan.getNote()
+        );
+    }
 }

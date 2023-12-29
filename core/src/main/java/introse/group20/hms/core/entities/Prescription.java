@@ -8,6 +8,8 @@ public class Prescription {
     private UUID id;
     private Date createdDay;
     private String note;
+    private Doctor doctor;
+    private Patient patient;
     private List<Medicine> medicines;
 
     public UUID getId() {
@@ -40,5 +42,21 @@ public class Prescription {
 
     public void setMedicines(List<Medicine> medicines) {
         this.medicines = medicines;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

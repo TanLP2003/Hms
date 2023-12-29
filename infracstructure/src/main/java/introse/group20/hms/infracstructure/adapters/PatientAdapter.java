@@ -3,9 +3,13 @@ package introse.group20.hms.infracstructure.adapters;
 import introse.group20.hms.application.adapters.IPatientAdapter;
 import introse.group20.hms.core.entities.Patient;
 import introse.group20.hms.core.entities.User;
+import introse.group20.hms.core.exceptions.BadRequestException;
 import introse.group20.hms.infracstructure.models.PatientModel;
 import introse.group20.hms.infracstructure.models.UserModel;
 import introse.group20.hms.infracstructure.models.enums.Role;
+import introse.group20.hms.infracstructure.models.enums.StayType;
+import introse.group20.hms.infracstructure.repositories.IMedicalRecordRepository;
+import introse.group20.hms.infracstructure.repositories.IPatientRepository;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -17,6 +21,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Component
 public class PatientAdapter implements IPatientAdapter {
     @Autowired
@@ -25,23 +31,31 @@ public class PatientAdapter implements IPatientAdapter {
     private EntityManager entityManager;
     @Autowired
     private PasswordEncoder encoder;
+    @Autowired
+    private IPatientRepository patientRepository;
+    @Autowired
+    private IMedicalRecordRepository medicalRecordRepository;
     @Override
     public List<Patient> getPatientByTypeAdapter(String type) {
-        return null;
+        List<Patient> patients = medicalRecordRepository.findByStayType(StayType.valueOf(type))
+                .stream()
+                .map(medicalRecordModel -> {
+                    UUID patientId = medicalRecordModel.getPatient().getId();
+                    return patientRepository.findById(patientId)
+                            .map(patientModel -> modelMapper.map(patientModel, Patient.class)).get();
+                })
+                .collect(Collectors.toList());
+        return patients;
     }
 
     @Override
     public Optional<Patient> getPatientByIdAdapter(UUID id) {
-        return Optional.empty();
+        return patientRepository.findById(id)
+                .map(patientModel -> modelMapper.map(patientModel, Patient.class));
     }
 
     @Override
     public List<Patient> getPatientOfDoctorAdapter(UUID doctorId) {
-        return null;
-    }
-
-    @Override
-    public List<Patient> getPatientInWeek() {
         return null;
     }
 
@@ -63,9 +77,11 @@ public class PatientAdapter implements IPatientAdapter {
         user.setPassword(password);
         return user;
     }
-
     @Override
-    public void updatePatientAdapter(Patient patient) {
-
+    public void updatePatientAdapter(Patient patient) throws BadRequestException {
+        patientRepository.findById(patient.getId())
+                .orElseThrow(() -> new BadRequestException("Bad Request! Patient not exist"));
+        PatientModel patientModel = modelMapper.map(patient, PatientModel.class);
+        patientRepository.save(patientModel);
     }
 }

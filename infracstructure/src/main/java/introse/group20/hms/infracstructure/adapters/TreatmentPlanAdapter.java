@@ -38,11 +38,12 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
 
     @Override
     public Optional<TreatmentPlan> getByIdAdapter(UUID id) {
-        return Optional.empty();
+        return treatmentPlanRepository.findById(id)
+                .map(treatmentPlanModel -> modelMapper.map(treatmentPlanModel, TreatmentPlan.class));
     }
 
     @Override
-    public void createTreatmentPlanAdapter(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
+    public TreatmentPlan createTreatmentPlanAdapter(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
         TreatmentPlanModel treatmentPlanModel = modelMapper.map(treatmentPlan, TreatmentPlanModel.class);
         Optional<PatientModel> patientModel = patientRepository.findById(patientId);
         Optional<DoctorModel> doctorModel = doctorRepository.findById(doctorId);
@@ -52,16 +53,24 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
         }
         treatmentPlanModel.setDoctor(doctorModel.get());
         treatmentPlanModel.setPatient(patientModel.get());
+        return modelMapper.map(treatmentPlanRepository.save(treatmentPlanModel), TreatmentPlan.class);
+    }
+
+    @Override
+    public void updateTreatmentPlanAdapter(TreatmentPlan treatmentPlan) throws BadRequestException {
+        TreatmentPlanModel treatmentPlanModel = treatmentPlanRepository.findById(treatmentPlan.getId())
+                .orElseThrow(() -> new BadRequestException("TreatmentPlan not exist"));
+        treatmentPlanModel.setTreatmentMethod(treatmentPlan.getTreatmentMethod());
+        treatmentPlanModel.setLastExaminationDay(treatmentPlan.getLastExaminationDay());
+        treatmentPlanModel.setNextExpectedExaminationDay(treatmentPlan.getNextExpectedExaminationDay());
+        treatmentPlanModel.setNote(treatmentPlan.getNote());
         treatmentPlanRepository.save(treatmentPlanModel);
     }
 
     @Override
-    public void updateTreatmentPlanAdapter(TreatmentPlan treatmentPlan) {
-
-    }
-
-    @Override
-    public void deleteTreatmentPlanAdapter(UUID id) {
-
+    public void deleteTreatmentPlanAdapter(UUID id) throws BadRequestException {
+        TreatmentPlanModel treatmentPlanModel = treatmentPlanRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("TreatmentPlan not exist"));
+        treatmentPlanRepository.delete(treatmentPlanModel);
     }
 }

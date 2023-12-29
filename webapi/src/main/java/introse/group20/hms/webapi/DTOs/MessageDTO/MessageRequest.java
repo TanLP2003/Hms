@@ -10,9 +10,9 @@ import java.util.UUID;
 @Data
 public class MessageRequest {
     @NotNull
-    private UUID doctorId;
+    private UUID senderId;
     @NotNull
-    private UUID patientId;
+    private UUID receiverId;
     @NotNull
     private Date time;
     @NotBlank

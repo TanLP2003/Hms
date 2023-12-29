@@ -1,8 +1,11 @@
 package introse.group20.hms.application.services;
 
 import introse.group20.hms.application.adapters.ISurgeryAdapter;
+import introse.group20.hms.application.services.interfaces.IDoctorService;
+import introse.group20.hms.application.services.interfaces.IPatientService;
 import introse.group20.hms.application.services.interfaces.ISurgeryService;
 import introse.group20.hms.core.entities.Surgery;
+import introse.group20.hms.core.exceptions.BadRequestException;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,21 +24,21 @@ public class SurgeryService implements ISurgeryService {
 
     @Override
     public List<Surgery> getSurgeryForDoctor(UUID doctorId) {
-        return null;
+        return surgeryAdapter.getSurgeryForDoctorAdapter(doctorId);
     }
 
     @Override
-    public Surgery addSurgery(UUID doctorId, UUID patientId, Surgery surgery) {
-        return null;
+    public Surgery addSurgery(UUID doctorId, UUID patientId, Surgery surgery) throws BadRequestException {
+        return surgeryAdapter.addSurgeryAdapter(doctorId, patientId, surgery);
     }
 
     @Override
-    public void updateSurgery(Surgery surgery) {
-
+    public void updateSurgery(Surgery surgery) throws BadRequestException {
+        surgeryAdapter.updateSurgeryAdapter(surgery);
     }
 
     @Override
-    public void deleteSurge(UUID surgeryId) {
-
+    public void deleteSurgery(UUID surgeryId) throws BadRequestException {
+        surgeryAdapter.deleteSurgeAdapter(surgeryId);
     }
 }
