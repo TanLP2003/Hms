@@ -22,14 +22,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/votes")
 @Validated
 public class VoteController {
 
     @Autowired
     private IVoteService voteService;
 
-    @GetMapping("/doctor")
+    @GetMapping("/votes/doctor")
     //route: /api/votes/doctor?doctorId=<id of doctor>
     public ResponseEntity<List<VoteResponse>> getDoctorVotes(@RequestParam UUID doctorId) {
         List<Vote> votes = voteService.getDoctorVote(doctorId);
@@ -39,14 +38,14 @@ public class VoteController {
         return new ResponseEntity<>(voteResponses, HttpStatus.OK);
     }
 
-    @GetMapping("/{voteId}")
+    @GetMapping("/votes/{voteId}")
     public ResponseEntity<VoteResponse> getById(@PathVariable UUID voteId) throws NotFoundException {
         Vote vote = voteService.getById(voteId);
         VoteResponse voteResponse = mapToDTO(vote);
         return new ResponseEntity<>(voteResponse, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/api/votes")
     @Secured("PATIENT")
     public ResponseEntity<VoteResponse> addVote(@Valid @RequestBody VoteRequest voteRequest) throws BadRequestException {
         Vote vote = mapToEntity(voteRequest);
@@ -55,7 +54,7 @@ public class VoteController {
         return new ResponseEntity<>(mapToDTO(newVote), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{voteId}")
+    @PutMapping("/api/votes/{voteId}")
     @Secured("PATIENT")
     public ResponseEntity<HttpStatus> updateVote(@PathVariable UUID voteId, @Valid @RequestBody VoteRequest voteRequest) throws BadRequestException {
         Vote vote = mapToEntity(voteRequest);
@@ -64,7 +63,7 @@ public class VoteController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{voteId}")
+    @DeleteMapping("/api/votes/{voteId}")
     @Secured("PATIENT")
     public ResponseEntity<HttpStatus> deleteVote(@PathVariable UUID voteId) throws BadRequestException {
         voteService.deleteVote(voteId);

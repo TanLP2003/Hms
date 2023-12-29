@@ -71,6 +71,7 @@ public class VoteAdapter implements IVoteAdapter {
             throw new BadRequestException("BAD REQUEST!");
         }
         VoteModel updatedVote = voteModel.get();
+
         updatedVote.setRating(vote.getRating());
         updatedVote.setContent(vote.getContent());
         iVoteRepository.save(updatedVote);
