@@ -38,12 +38,12 @@ public class MedicalRecordService implements IMedicalRecordService {
     }
 
     @Override
-    public void updateMedicalRecord(MedicalRecord medicalRecord) throws BadRequestException {
-        iMedicalRecordAdapter.updateMedicalRecordAdapter(medicalRecord);
+    public void updateMedicalRecord(UUID userId, MedicalRecord medicalRecord) throws BadRequestException {
+        iMedicalRecordAdapter.updateMedicalRecordAdapter(userId, medicalRecord);
     }
 
     @Override
-    public void deleteMedicalRecord(UUID mrId) throws BadRequestException {
-        iMedicalRecordAdapter.deleteMedicalRecordAdapter(mrId);
+    public void deleteMedicalRecord(UUID userId, UUID mrId) throws BadRequestException {
+        iMedicalRecordAdapter.deleteMedicalRecordAdapter(userId, mrId);
     }
 }

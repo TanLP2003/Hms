@@ -63,14 +63,16 @@ public class TreatmentPlanController {
     public ResponseEntity<HttpStatus> updateTreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
         TreatmentPlan treatmentPlan = modelMapper.map(request, TreatmentPlan.class);
         treatmentPlan.setId(id);
-        treatmentPlanService.updateTreatmentPlan(treatmentPlan);
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        treatmentPlanService.updateTreatmentPlan(userId, treatmentPlan);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @Secured("DOCTOR")
     public ResponseEntity<HttpStatus> deleteTreatmentPlan(@PathVariable UUID id) throws BadRequestException {
-        treatmentPlanService.deleteTreatmentPlan(id);
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        treatmentPlanService.deleteTreatmentPlan(userId, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

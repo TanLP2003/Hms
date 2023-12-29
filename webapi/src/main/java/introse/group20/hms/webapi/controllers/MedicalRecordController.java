@@ -91,14 +91,16 @@ public class MedicalRecordController {
         }
         MedicalRecord medicalRecord = modelMapper.map(request, MedicalRecord.class);
         medicalRecord.setId(medicalRecordId);
-        medicalRecordService.updateMedicalRecord(medicalRecord);
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        medicalRecordService.updateMedicalRecord(userId, medicalRecord);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     @Secured("DOCTOR")
     public ResponseEntity<HttpStatus> deleteMedicalRecord(@PathVariable UUID id) throws BadRequestException {
-        medicalRecordService.deleteMedicalRecord(id);
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        medicalRecordService.deleteMedicalRecord(userId, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

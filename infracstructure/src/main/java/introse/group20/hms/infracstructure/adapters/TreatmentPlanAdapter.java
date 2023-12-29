@@ -57,9 +57,12 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
     }
 
     @Override
-    public void updateTreatmentPlanAdapter(TreatmentPlan treatmentPlan) throws BadRequestException {
+    public void updateTreatmentPlanAdapter(UUID userId, TreatmentPlan treatmentPlan) throws BadRequestException {
         TreatmentPlanModel treatmentPlanModel = treatmentPlanRepository.findById(treatmentPlan.getId())
                 .orElseThrow(() -> new BadRequestException("TreatmentPlan not exist"));
+        if(userId.compareTo(treatmentPlanModel.getDoctor().getId()) != 0) {
+            throw new BadRequestException("Bad Request! Action not allowed!");
+        }
         treatmentPlanModel.setTreatmentMethod(treatmentPlan.getTreatmentMethod());
         treatmentPlanModel.setLastExaminationDay(treatmentPlan.getLastExaminationDay());
         treatmentPlanModel.setNextExpectedExaminationDay(treatmentPlan.getNextExpectedExaminationDay());
@@ -68,9 +71,12 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
     }
 
     @Override
-    public void deleteTreatmentPlanAdapter(UUID id) throws BadRequestException {
+    public void deleteTreatmentPlanAdapter(UUID userId, UUID id) throws BadRequestException {
         TreatmentPlanModel treatmentPlanModel = treatmentPlanRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("TreatmentPlan not exist"));
+        if(userId.compareTo(treatmentPlanModel.getDoctor().getId()) != 0) {
+            throw new BadRequestException("Bad Request! Action not allowed!");
+        }
         treatmentPlanRepository.delete(treatmentPlanModel);
     }
 }

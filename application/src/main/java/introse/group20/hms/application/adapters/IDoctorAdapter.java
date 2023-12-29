@@ -16,6 +16,6 @@ public interface IDoctorAdapter {
     Optional<Doctor> getByIdAdapter(UUID id) ;
     User addDoctorAdapter(UUID departmentId, Doctor doctor) throws BadRequestException;
     void updateDoctorAdapter(Doctor doctor);
-    void deleteDoctorAdapter(UUID doctorId);
+    void deleteDoctorAdapter(UUID doctorId) throws BadRequestException;
     void test();
 }

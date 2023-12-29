@@ -33,12 +33,12 @@ public class TreatmentPlanService implements ITreatmentPlanService {
     }
 
     @Override
-    public void deleteTreatmentPlan(UUID id) throws BadRequestException {
-        iTreatmentPlanAdapter.deleteTreatmentPlanAdapter(id);
+    public void deleteTreatmentPlan(UUID userId, UUID id) throws BadRequestException {
+        iTreatmentPlanAdapter.deleteTreatmentPlanAdapter(userId, id);
     }
 
     @Override
-    public void updateTreatmentPlan(TreatmentPlan treatmentPlan) throws BadRequestException {
-        iTreatmentPlanAdapter.updateTreatmentPlanAdapter(treatmentPlan);
+    public void updateTreatmentPlan(UUID userId, TreatmentPlan treatmentPlan) throws BadRequestException {
+        iTreatmentPlanAdapter.updateTreatmentPlanAdapter(userId, treatmentPlan);
     }
 }

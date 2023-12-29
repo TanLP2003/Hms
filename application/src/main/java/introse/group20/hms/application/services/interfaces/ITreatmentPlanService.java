@@ -11,6 +11,6 @@ public interface ITreatmentPlanService {
     List<TreatmentPlan> getForUser(UUID userId);
     TreatmentPlan getById(UUID id) throws NotFoundException;
     TreatmentPlan createTreatmentPlan(UUID patientId,UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException;
-    void deleteTreatmentPlan(UUID id) throws BadRequestException;
-    void updateTreatmentPlan(TreatmentPlan treatmentPlan) throws BadRequestException;
+    void deleteTreatmentPlan(UUID userId, UUID id) throws BadRequestException;
+    void updateTreatmentPlan(UUID userId, TreatmentPlan treatmentPlan) throws BadRequestException;
 }

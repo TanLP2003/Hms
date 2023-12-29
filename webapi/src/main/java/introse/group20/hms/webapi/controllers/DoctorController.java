@@ -94,8 +94,7 @@ public class DoctorController {
     }
     @DeleteMapping("/api/doctors/{doctorId}")
     @Secured("ADMIN")
-    public ResponseEntity<HttpStatus> deleteDoctor(@PathVariable UUID doctorId)
-    {
+    public ResponseEntity<HttpStatus> deleteDoctor(@PathVariable UUID doctorId) throws BadRequestException {
         doctorService.deleteDoctor(doctorId);
         return new ResponseEntity<HttpStatus>(HttpStatus.OK);
     }

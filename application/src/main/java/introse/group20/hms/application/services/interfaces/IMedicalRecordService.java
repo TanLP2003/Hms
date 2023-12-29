@@ -11,6 +11,6 @@ public interface IMedicalRecordService {
     List<MedicalRecord> getByPatientId(UUID patientId);
     MedicalRecord getById(UUID mrId) throws NotFoundException;
     MedicalRecord addMedicalRecord(UUID patientId, UUID departmentId, UUID doctorId, MedicalRecord medicalRecord) throws BadRequestException;
-    void updateMedicalRecord(MedicalRecord medicalRecord) throws BadRequestException;
-    void deleteMedicalRecord(UUID mrId) throws BadRequestException;
+    void updateMedicalRecord(UUID userId, MedicalRecord medicalRecord) throws BadRequestException;
+    void deleteMedicalRecord(UUID userId, UUID mrId) throws BadRequestException;
 }

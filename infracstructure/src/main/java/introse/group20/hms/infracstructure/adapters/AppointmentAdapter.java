@@ -68,9 +68,14 @@ public class AppointmentAdapter implements IAppointmentAdapter {
     }
 
     @Override
-    public void updateAppointmentAdapter(Appointment appointment) throws BadRequestException {
+    public void updateAppointmentAdapter(UUID userId, Appointment appointment) throws BadRequestException {
         AppointmentModel appointmentModel = appointmentRepository.findById(appointment.getId())
                 .orElseThrow(() -> new BadRequestException(String.format("Appointment with id: %s not exist", appointment.getId())));
+        if(userId.compareTo(appointmentModel.getDoctor().getId()) != 0
+                && userId.compareTo(appointmentModel.getPatient().getId()) != 0
+        ) {
+            throw new BadRequestException("Bad Request! Action not allowed!");
+        }
         appointmentModel.setNote(appointment.getNote());
         appointmentModel.setTime(appointment.getTime());
         appointmentModel.setStatus(AppointmentStatus.valueOf(appointment.getStatus().toString()));
@@ -78,9 +83,12 @@ public class AppointmentAdapter implements IAppointmentAdapter {
     }
 
     @Override
-    public void deleteAppointmentAdapter(UUID id) throws BadRequestException {
+    public void deleteAppointmentAdapter(UUID userId, UUID id) throws BadRequestException {
         AppointmentModel appointmentModel = appointmentRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(String.format("Appointment with id: %s not exist", id)));
+        if(userId.compareTo(appointmentModel.getDoctor().getId()) != 0) {
+            throw new BadRequestException("Bad Request! Action not allowed!");
+        }
         appointmentRepository.delete(appointmentModel);
     }
 }

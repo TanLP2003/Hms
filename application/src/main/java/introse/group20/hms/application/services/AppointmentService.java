@@ -37,12 +37,12 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public void updateAppointment(Appointment appointment) throws BadRequestException {
-        appointmentAdapter.updateAppointmentAdapter(appointment);
+    public void updateAppointment(UUID userId, Appointment appointment) throws BadRequestException {
+        appointmentAdapter.updateAppointmentAdapter(userId, appointment);
     }
 
     @Override
-    public void deleteAppointment(UUID id) throws BadRequestException {
-        appointmentAdapter.deleteAppointmentAdapter(id);
+    public void deleteAppointment(UUID userId, UUID id) throws BadRequestException {
+        appointmentAdapter.deleteAppointmentAdapter(userId, id);
     }
 }

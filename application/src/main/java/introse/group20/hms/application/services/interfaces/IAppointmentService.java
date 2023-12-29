@@ -13,6 +13,6 @@ public interface IAppointmentService {
     List<Appointment> getAppointmentByDoctor(UUID doctorId);
     List<Appointment> getAppointmentByPatient(UUID patientId);
     Appointment addAppointment(UUID doctorId, UUID patientId, Appointment apm) throws BadRequestException;
-    void updateAppointment(Appointment appointment) throws BadRequestException;
-    void deleteAppointment(UUID id) throws BadRequestException;
+    void updateAppointment(UUID userId, Appointment appointment) throws BadRequestException;
+    void deleteAppointment(UUID userId, UUID id) throws BadRequestException;
 }

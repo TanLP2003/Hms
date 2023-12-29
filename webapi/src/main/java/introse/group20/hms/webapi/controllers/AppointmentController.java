@@ -66,14 +66,16 @@ public class AppointmentController {
         Appointment appointment = modelMapper.map(apmRequest, Appointment.class);
         appointment.setStatus(apmStatus);
         appointment.setId(appointmentId);
-        appointmentService.updateAppointment(appointment);
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        appointmentService.updateAppointment(userId, appointment);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{appointmentId}")
     @Secured({"PATIENT"})
     public ResponseEntity<HttpStatus> deleteAppointment(@PathVariable UUID appointmentId) throws BadRequestException {
-        appointmentService.deleteAppointment(appointmentId);
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        appointmentService.deleteAppointment(userId, appointmentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     private AppointmentResponse mapToApmResponse(Appointment appointment){

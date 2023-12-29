@@ -79,12 +79,17 @@ public class MedicalRecordAdapter implements IMedicalRecordAdapter {
     }
 
     @Override
-    public void updateMedicalRecordAdapter(MedicalRecord medicalRecord) throws BadRequestException {
+    public void updateMedicalRecordAdapter(UUID userId, MedicalRecord medicalRecord) throws BadRequestException {
         Optional<MedicalRecordModel> medicalRecordModel = iMedicalRecordRepository.findById(medicalRecord.getId());
         if (medicalRecordModel.isEmpty()) {
             throw new BadRequestException("Bad request!");
         }
         MedicalRecordModel updatedMedicalRecordModel = medicalRecordModel.get();
+
+        if(userId.compareTo(updatedMedicalRecordModel.getDoctor().getId()) != 0){
+            throw new BadRequestException("Bad Request! Action now allowed!");
+        }
+
         updatedMedicalRecordModel.setBHYTCode(medicalRecord.getBHYTCode());
         updatedMedicalRecordModel.setInDay(medicalRecord.getInDay());
         updatedMedicalRecordModel.setOutDay(medicalRecord.getOutDay());
@@ -99,9 +104,12 @@ public class MedicalRecordAdapter implements IMedicalRecordAdapter {
     }
 
     @Override
-    public void deleteMedicalRecordAdapter(UUID mrId) throws BadRequestException {
+    public void deleteMedicalRecordAdapter(UUID userId, UUID mrId) throws BadRequestException {
         MedicalRecordModel medicalRecordModel = iMedicalRecordRepository.findById(mrId)
                 .orElseThrow(() -> new BadRequestException("Bad Request!"));
+        if(userId.compareTo(medicalRecordModel.getDoctor().getId()) != 0){
+            throw new BadRequestException("Bad Request! Action now allowed!");
+        }
         iMedicalRecordRepository.deleteById(mrId);
     }
 }
