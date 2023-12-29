@@ -8,5 +8,4 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IMedicalRecordRepository extends JpaRepository<MedicalRecordModel, UUID> {
-    List<MedicalRecordModel> findByStayType(StayType stayType);
 }

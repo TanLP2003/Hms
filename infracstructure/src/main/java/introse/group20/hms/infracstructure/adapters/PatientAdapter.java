@@ -37,15 +37,16 @@ public class PatientAdapter implements IPatientAdapter {
     private IMedicalRecordRepository medicalRecordRepository;
     @Override
     public List<Patient> getPatientByTypeAdapter(String type) {
-        List<Patient> patients = medicalRecordRepository.findByStayType(StayType.valueOf(type))
-                .stream()
-                .map(medicalRecordModel -> {
-                    UUID patientId = medicalRecordModel.getPatient().getId();
-                    return patientRepository.findById(patientId)
-                            .map(patientModel -> modelMapper.map(patientModel, Patient.class)).get();
-                })
-                .collect(Collectors.toList());
-        return patients;
+//        List<Patient> patients = medicalRecordRepository.findByStayType(StayType.valueOf(type))
+//                .stream()
+//                .map(medicalRecordModel -> {
+//                    UUID patientId = medicalRecordModel.getPatient().getId();
+//                    return patientRepository.findById(patientId)
+//                            .map(patientModel -> modelMapper.map(patientModel, Patient.class)).get();
+//                })
+//                .collect(Collectors.toList());
+//        return patients;
+        return null;
     }
 
     @Override
