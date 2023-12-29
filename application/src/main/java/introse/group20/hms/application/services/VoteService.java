@@ -38,12 +38,12 @@ public class VoteService implements IVoteService {
     }
 
     @Override
-    public void updateVote(Vote vote) throws BadRequestException {
-        iVoteAdapter.updateVoteAdapter(vote);
+    public void updateVote(UUID userId, Vote vote) throws BadRequestException {
+        iVoteAdapter.updateVoteAdapter(userId, vote);
     }
 
     @Override
-    public void deleteVote(UUID voteId) throws BadRequestException {
-        iVoteAdapter.deleteVoteAdapter(voteId);
+    public void deleteVote(UUID userId, UUID voteId) throws BadRequestException {
+        iVoteAdapter.deleteVoteAdapter(userId, voteId);
     }
 }

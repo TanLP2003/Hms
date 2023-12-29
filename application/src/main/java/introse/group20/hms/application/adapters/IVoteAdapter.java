@@ -11,6 +11,6 @@ public interface IVoteAdapter {
     List<Vote> getDoctorVoteAdapter(UUID doctorId);
     Optional<Vote> getByIdAdapter(UUID voteId);
     Vote addVoteAdapter(UUID patientId, UUID doctorId, Vote vote) throws BadRequestException;
-    void updateVoteAdapter(Vote vote) throws BadRequestException;
-    void deleteVoteAdapter(UUID voteId) throws BadRequestException;
+    void updateVoteAdapter(UUID userId, Vote vote) throws BadRequestException;
+    void deleteVoteAdapter(UUID userId, UUID voteId) throws BadRequestException;
 }

@@ -70,9 +70,12 @@ public class PrescriptionAdapter implements IPrescriptionAdapter {
     }
     @Transactional
     @Override
-    public void updatePrescriptionAdapter(Prescription prescription) throws BadRequestException {
+    public void updatePrescriptionAdapter(UUID userId, Prescription prescription) throws BadRequestException {
         PrescriptionModel prescriptionModel = prescriptionRepository.findById(prescription.getId())
                 .orElseThrow(() -> new BadRequestException("Bad Request! Prescription not exist!"));
+        if(userId.compareTo(prescriptionModel.getDoctor().getId()) != 0) {
+            throw new BadRequestException("Bad Request! Action not allowed!");
+        }
         prescriptionModel.setCreatedDay(prescription.getCreatedDay());
         prescriptionModel.setNote(prescription.getNote());
         for(MedicineModel medicineModel : prescriptionModel.getMedicines()){
@@ -90,9 +93,12 @@ public class PrescriptionAdapter implements IPrescriptionAdapter {
     }
 
     @Override
-    public void deletePrescriptionAdapter(UUID presId) throws BadRequestException {
+    public void deletePrescriptionAdapter(UUID userId, UUID presId) throws BadRequestException {
         PrescriptionModel prescriptionModel = prescriptionRepository.findById(presId)
                 .orElseThrow(() -> new BadRequestException("Bad Request! Prescription not exist!"));
+        if(userId.compareTo(prescriptionModel.getDoctor().getId()) != 0) {
+            throw new BadRequestException("Bad Request! Action not allowed!");
+        }
         prescriptionRepository.delete(prescriptionModel);
     }
 }
