@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import java.util.UUID;
 @Entity
 @Table(name = "posts")
@@ -14,7 +15,7 @@ public class PostModel {
     @GeneratedValue
     private UUID id;
     private String title;
-    @Lob
+    @Column(length = 1000000)
     private String content;
     @Column(length = 1000)
     private String summary;
@@ -25,6 +26,6 @@ public class PostModel {
     @JoinColumn(name = "category_id")
     private CategoryModel category;
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "doctor_id", updatable = false)
     private DoctorModel doctor;
 }
