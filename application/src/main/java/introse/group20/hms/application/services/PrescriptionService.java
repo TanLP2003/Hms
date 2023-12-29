@@ -30,12 +30,12 @@ public class PrescriptionService implements IPrescriptionService {
     }
 
     @Override
-    public void updatePrescription(Prescription prescription) throws BadRequestException {
-        prescriptionAdapter.updatePrescriptionAdapter(prescription);
+    public void updatePrescription(UUID userId, Prescription prescription) throws BadRequestException {
+        prescriptionAdapter.updatePrescriptionAdapter(userId, prescription);
     }
 
     @Override
-    public void deletePrescription(UUID presId) throws BadRequestException {
-        prescriptionAdapter.deletePrescriptionAdapter(presId);
+    public void deletePrescription(UUID userId, UUID presId) throws BadRequestException {
+        prescriptionAdapter.deletePrescriptionAdapter(userId, presId);
     }
 }

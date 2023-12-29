@@ -65,23 +65,28 @@ public class VoteAdapter implements IVoteAdapter {
     }
 
     @Override
-    public void updateVoteAdapter(Vote vote) throws BadRequestException {
+    public void updateVoteAdapter(UUID userId, Vote vote) throws BadRequestException {
         Optional<VoteModel> voteModel = iVoteRepository.findById(vote.getId());
         if (voteModel.isEmpty()) {
             throw new BadRequestException("BAD REQUEST!");
         }
         VoteModel updatedVote = voteModel.get();
-
+        if(userId.compareTo(updatedVote.getPatient().getId()) != 0) {
+            throw new BadRequestException("Bad Request! You don't have permission to do that!");
+        }
         updatedVote.setRating(vote.getRating());
         updatedVote.setContent(vote.getContent());
         iVoteRepository.save(updatedVote);
     }
 
     @Override
-    public void deleteVoteAdapter(UUID voteId) throws BadRequestException {
+    public void deleteVoteAdapter(UUID userId, UUID voteId) throws BadRequestException {
         Optional<VoteModel> voteModel = iVoteRepository.findById(voteId);
         if (voteModel.isEmpty()) {
             throw new BadRequestException("BAD REQUEST!");
+        }
+        if(userId.compareTo(voteModel.get().getPatient().getId()) != 0) {
+            throw new BadRequestException("Bad Request! You don't have permission to do that!");
         }
         iVoteRepository.deleteById(voteId);
     }
