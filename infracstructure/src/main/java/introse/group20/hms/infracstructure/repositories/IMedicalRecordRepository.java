@@ -8,4 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IMedicalRecordRepository extends JpaRepository<MedicalRecordModel, UUID> {
+    List<MedicalRecordModel> findByPatientId(UUID patientId);
+    List<MedicalRecordModel> findByStayType(StayType stayType);
+    List<MedicalRecordModel> findByDoctorId(UUID doctorId);
 }

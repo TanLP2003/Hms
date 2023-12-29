@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface IPatientService {
     List<Patient> getPatientByType(String type);
     Patient getPatientById(UUID id) throws NotFoundException;
-    List<Patient> getPatientOfDoctor(UUID doctorId);
+    List<Patient> getPatientOfDoctor(UUID doctorId) throws NotFoundException;
     User addPatient(Patient patient);
     void updatePatient(Patient patient) throws BadRequestException;
 }

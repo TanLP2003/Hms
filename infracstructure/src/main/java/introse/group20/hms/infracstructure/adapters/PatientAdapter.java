@@ -4,10 +4,12 @@ import introse.group20.hms.application.adapters.IPatientAdapter;
 import introse.group20.hms.core.entities.Patient;
 import introse.group20.hms.core.entities.User;
 import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
 import introse.group20.hms.infracstructure.models.PatientModel;
 import introse.group20.hms.infracstructure.models.UserModel;
 import introse.group20.hms.infracstructure.models.enums.Role;
 import introse.group20.hms.infracstructure.models.enums.StayType;
+import introse.group20.hms.infracstructure.repositories.IDoctorRepository;
 import introse.group20.hms.infracstructure.repositories.IMedicalRecordRepository;
 import introse.group20.hms.infracstructure.repositories.IPatientRepository;
 import jakarta.persistence.Column;
@@ -35,18 +37,19 @@ public class PatientAdapter implements IPatientAdapter {
     private IPatientRepository patientRepository;
     @Autowired
     private IMedicalRecordRepository medicalRecordRepository;
+    @Autowired
+    private IDoctorRepository doctorRepository;
     @Override
     public List<Patient> getPatientByTypeAdapter(String type) {
-//        List<Patient> patients = medicalRecordRepository.findByStayType(StayType.valueOf(type))
-//                .stream()
-//                .map(medicalRecordModel -> {
-//                    UUID patientId = medicalRecordModel.getPatient().getId();
-//                    return patientRepository.findById(patientId)
-//                            .map(patientModel -> modelMapper.map(patientModel, Patient.class)).get();
-//                })
-//                .collect(Collectors.toList());
-//        return patients;
-        return null;
+        List<Patient> patients = medicalRecordRepository.findByStayType(StayType.valueOf(type))
+                .stream()
+                .map(medicalRecordModel -> {
+                    UUID patientId = medicalRecordModel.getPatient().getId();
+                    return patientRepository.findById(patientId)
+                            .map(patientModel -> modelMapper.map(patientModel, Patient.class)).get();
+                })
+                .collect(Collectors.toList());
+        return patients;
     }
 
     @Override
@@ -56,8 +59,16 @@ public class PatientAdapter implements IPatientAdapter {
     }
 
     @Override
-    public List<Patient> getPatientOfDoctorAdapter(UUID doctorId) {
-        return null;
+    public List<Patient> getPatientOfDoctorAdapter(UUID doctorId) throws NotFoundException {
+        doctorRepository.findById(doctorId).orElseThrow(() -> new NotFoundException(String.format("Doctor with id: %s not exist", doctorId)));
+        List<Patient> patients = medicalRecordRepository.findByDoctorId(doctorId).stream()
+                .map(medicalRecordModel -> {
+                    UUID patientId = medicalRecordModel.getPatient().getId();
+                    return patientRepository.findById(patientId)
+                            .map(patientModel -> modelMapper.map(patientModel, Patient.class)).get();
+                })
+                .collect(Collectors.toList());
+        return patients;
     }
 
     @Override

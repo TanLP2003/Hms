@@ -18,7 +18,7 @@ public class PatientService implements IPatientService {
     }
     @Override
     public List<Patient> getPatientByType(String type) {
-        return null;
+        return patientAdapter.getPatientByTypeAdapter(type);
     }
 
     @Override
@@ -28,14 +28,10 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public List<Patient> getPatientOfDoctor(UUID doctorId) {
-        return null;
+    public List<Patient> getPatientOfDoctor(UUID doctorId) throws NotFoundException {
+        return patientAdapter.getPatientOfDoctorAdapter(doctorId);
     }
 
-    @Override
-    public List<Patient> getPatientInWeek() {
-        return null;
-    }
 
     @Override
     public User addPatient(Patient patient)

@@ -19,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
@@ -48,6 +50,24 @@ public class PatientController {
     public ResponseEntity<PatientResponse> getPatientById(@PathVariable UUID patientId) throws NotFoundException {
         Patient patient = patientService.getPatientById(patientId);
         return ResponseEntity.ok(modelMapper.map(patient, PatientResponse.class));
+    }
+
+    @GetMapping
+    @Secured("DOCTOR")
+    public ResponseEntity<List<PatientResponse>> getPatientByType(@RequestParam String stayType){
+        List<PatientResponse> list =  patientService.getPatientByType(stayType).stream()
+                .map(patient -> modelMapper.map(patient, PatientResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/doctor")
+    @Secured("DOCTOR")
+    public ResponseEntity<List<PatientResponse>> getPatientOfDoctor(@RequestParam UUID doctorId) throws NotFoundException {
+        List<PatientResponse> list = patientService.getPatientOfDoctor(doctorId).stream()
+                .map(patient -> modelMapper.map(patient, PatientResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(list);
     }
 
     @PutMapping("/{patientId}")

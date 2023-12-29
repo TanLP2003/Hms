@@ -1,7 +1,8 @@
 package introse.group20.hms.infracstructure.models;
 
 
-import introse.group20.hms.infracstructure.models.enums.Rating;
+
+import introse.group20.hms.core.entities.enums.Rating;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

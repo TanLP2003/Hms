@@ -5,6 +5,14 @@ import introse.group20.hms.core.entities.enums.Rating;
 import java.util.UUID;
 
 public class Vote {
+    public Vote() {
+    }
+
+    public Vote(Rating rating, String content) {
+        this.rating = rating;
+        this.content = content;
+    }
+
     private UUID id;
     private Rating rating;
     private String content;
