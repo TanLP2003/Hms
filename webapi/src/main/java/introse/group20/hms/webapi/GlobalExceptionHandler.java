@@ -20,8 +20,9 @@ public class GlobalExceptionHandler {
 
     private HttpStatus determineHttpStatus(Exception e) {
 
-        if (e instanceof BaseException) {
-            return HttpStatus.valueOf(((BaseException) e).getStatusCode());
+        if (e instanceof BaseException ex) {
+            int statusCode = ex.getStatusCode();
+            return HttpStatus.valueOf(statusCode);
         }
         return HttpStatus.INTERNAL_SERVER_ERROR;
     }
