@@ -32,6 +32,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
 @Validated
@@ -59,9 +60,9 @@ public class DoctorController {
         }
         else url = uploadService.upload(doctorRequest.getImage().getBytes(), doctorRequest.getImage().getOriginalFilename(), "avatars");
         Doctor doctor = new Doctor();
+        modelMapper.map(doctorRequest, doctor);
         doctor.setImage(url);
         doctor.setGender(Gender.valueOf(doctorRequest.getGender()));
-        modelMapper.map(doctorRequest, doctor);
         User user = doctorService.addDoctor(doctorRequest.getDepartmentId(), doctor);
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
 //        smsService.sendSms(userDTO.getUsername(), userDTO.getPassword());
@@ -98,9 +99,9 @@ public class DoctorController {
         doctorService.deleteDoctor(doctorId);
         return new ResponseEntity<HttpStatus>(HttpStatus.OK);
     }
-    @PutMapping("/api/doctors/{doctorId}")
+    @RequestMapping(path = "/api/doctors/{doctorId}", method = PUT, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("ADMIN")
-    public ResponseEntity<HttpStatus> updateDoctor(@PathVariable UUID doctorId,@Valid @RequestBody DoctorRequest doctorRequest)
+    public ResponseEntity<HttpStatus> updateDoctor(@PathVariable UUID doctorId,@Valid @ModelAttribute DoctorRequest doctorRequest)
     {
         Doctor doctor = modelMapper.map(doctorRequest, Doctor.class);
         doctor.setId(doctorId);
