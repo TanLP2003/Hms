@@ -18,5 +18,5 @@ public class SurgeryResponse {
     private String patientName;
     private Date time;
     private String content;
-    private Date expectedTime;
+    private float expectedTime;
 }

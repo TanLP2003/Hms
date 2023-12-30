@@ -18,5 +18,5 @@ public class SurgeryRequest {
     @NotBlank
     private String content;
     @NotNull
-    private Date expectedTime;
+    private float expectedTime;
 }
