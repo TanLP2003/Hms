@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 import java.util.UUID;
 @Data
-public class AppointmentRequest {
+public class  AppointmentRequest {
     @NotNull(message = "doctorId can not be null")
     private UUID doctorId;
     @NotNull(message = "Date can not be null")

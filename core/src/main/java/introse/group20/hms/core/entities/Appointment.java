@@ -23,13 +23,13 @@ public class Appointment {
         this.id = id;
     }
 
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
+//    public String getPatientName() {
+//        return patientName;
+//    }
+//
+//    public void setPatientName(String patientName) {
+//        this.patientName = patientName;
+//    }
 
     public Date getTime() {
         return time;
