@@ -69,13 +69,7 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
         if(treatmentPlanModel.isEmpty()){
             throw new BadRequestException("treatmentPlanId Not Found!");
         }
-        Optional<PatientModel> patientModelOptional = patientRepository.findById(treatmentPlan.getPatient().getId());
-        if(patientModelOptional.isEmpty()){
-            throw new BadRequestException("Patient Not Found!");
-        }
-        PatientModel patientModel = modelMapper.map(treatmentPlan.getPatient(), PatientModel.class);
         TreatmentPlanModel updatedTreatmentPlanModel = treatmentPlanModel.get();
-        updatedTreatmentPlanModel.setPatient(patientModel);
         updatedTreatmentPlanModel.setTreatmentMethod(treatmentPlan.getTreatmentMethod());
         updatedTreatmentPlanModel.setLastExaminationDay(treatmentPlan.getLastExaminationDay());
         updatedTreatmentPlanModel.setNextExpectedExaminationDay(treatmentPlan.getNextExpectedExaminationDay());
