@@ -2,10 +2,13 @@ package introse.group20.hms.application.services;
 
 import introse.group20.hms.application.adapters.ITreatmentPlanAdapter;
 import introse.group20.hms.application.services.interfaces.ITreatmentPlanService;
+import introse.group20.hms.core.entities.MedicalRecord;
 import introse.group20.hms.core.entities.TreatmentPlan;
 import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class TreatmentPlanService implements ITreatmentPlanService {
@@ -21,22 +24,26 @@ public class TreatmentPlanService implements ITreatmentPlanService {
     }
 
     @Override
-    public TreatmentPlan getById(UUID id) {
-        return null;
+    public TreatmentPlan getById(UUID id) throws NotFoundException {
+        Optional<TreatmentPlan> treatmentPlan = iTreatmentPlanAdapter.getByIdAdapter(id);
+        if(treatmentPlan.isEmpty()){
+            throw new NotFoundException("Treatment Plan is not found!");
+        }
+        return treatmentPlan.get();
     }
 
     @Override
-    public void createTreatmentPlan(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
-        iTreatmentPlanAdapter.createTreatmentPlanAdapter(patientId, doctorId, treatmentPlan);
+    public TreatmentPlan createTreatmentPlan(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
+        return iTreatmentPlanAdapter.createTreatmentPlanAdapter(patientId, doctorId, treatmentPlan);
     }
 
     @Override
-    public void deleteTreatmentPlan(UUID id) {
-
+    public void deleteTreatmentPlan(UUID id) throws BadRequestException {
+        iTreatmentPlanAdapter.deleteTreatmentPlanAdapter(id);
     }
 
     @Override
-    public void updateTreatmentPlan(TreatmentPlan treatmentPlan) {
-
+    public TreatmentPlan updateTreatmentPlan(TreatmentPlan treatmentPlan) throws BadRequestException {
+        return iTreatmentPlanAdapter.updateTreatmentPlanAdapter(treatmentPlan);
     }
 }

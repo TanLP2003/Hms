@@ -1,8 +1,10 @@
 package introse.group20.hms.infracstructure.adapters;
 
 import introse.group20.hms.application.adapters.ITreatmentPlanAdapter;
+import introse.group20.hms.core.entities.Patient;
 import introse.group20.hms.core.entities.TreatmentPlan;
 import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
 import introse.group20.hms.infracstructure.models.DoctorModel;
 import introse.group20.hms.infracstructure.models.PatientModel;
 import introse.group20.hms.infracstructure.models.TreatmentPlanModel;
@@ -38,11 +40,16 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
 
     @Override
     public Optional<TreatmentPlan> getByIdAdapter(UUID id) {
-        return Optional.empty();
+        Optional<TreatmentPlanModel> treatmentPlanOptional = treatmentPlanRepository.findById(id);
+        if(!treatmentPlanOptional.isEmpty()){
+            TreatmentPlan treatmentPlan = modelMapper.map(treatmentPlanOptional.get(), TreatmentPlan.class);
+            return Optional.of(treatmentPlan);
+        }
+        else return Optional.empty();
     }
 
     @Override
-    public void createTreatmentPlanAdapter(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
+    public TreatmentPlan createTreatmentPlanAdapter(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
         TreatmentPlanModel treatmentPlanModel = modelMapper.map(treatmentPlan, TreatmentPlanModel.class);
         Optional<PatientModel> patientModel = patientRepository.findById(patientId);
         Optional<DoctorModel> doctorModel = doctorRepository.findById(doctorId);
@@ -52,16 +59,29 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
         }
         treatmentPlanModel.setDoctor(doctorModel.get());
         treatmentPlanModel.setPatient(patientModel.get());
-        treatmentPlanRepository.save(treatmentPlanModel);
+        TreatmentPlanModel savedTreatmentModel = treatmentPlanRepository.save(treatmentPlanModel);
+        return modelMapper.map(savedTreatmentModel, TreatmentPlan.class);
     }
 
     @Override
-    public void updateTreatmentPlanAdapter(TreatmentPlan treatmentPlan) {
-
+    public TreatmentPlan updateTreatmentPlanAdapter(TreatmentPlan treatmentPlan) throws BadRequestException {
+        Optional<TreatmentPlanModel> treatmentPlanModel = treatmentPlanRepository.findById(treatmentPlan.getId());
+        if(treatmentPlanModel.isEmpty()){
+            throw new BadRequestException("treatmentPlanId Not Found!");
+        }
+        TreatmentPlanModel updatedTreatmentPlanModel = treatmentPlanModel.get();
+        updatedTreatmentPlanModel.setTreatmentMethod(treatmentPlan.getTreatmentMethod());
+        updatedTreatmentPlanModel.setLastExaminationDay(treatmentPlan.getLastExaminationDay());
+        updatedTreatmentPlanModel.setNextExpectedExaminationDay(treatmentPlan.getNextExpectedExaminationDay());
+        updatedTreatmentPlanModel.setNote(treatmentPlan.getNote());
+        treatmentPlanRepository.save(updatedTreatmentPlanModel);
+        return modelMapper.map(updatedTreatmentPlanModel, TreatmentPlan.class);
     }
 
     @Override
-    public void deleteTreatmentPlanAdapter(UUID id) {
-
+    public void deleteTreatmentPlanAdapter(UUID id) throws BadRequestException{
+        TreatmentPlanModel treatmentPlanModel = treatmentPlanRepository.findById(id)
+            .orElseThrow(() -> new BadRequestException("Bad Request!"));
+        treatmentPlanRepository.deleteById(id);
     }
 }

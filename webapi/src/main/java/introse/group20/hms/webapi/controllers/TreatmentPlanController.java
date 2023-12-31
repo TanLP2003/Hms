@@ -3,6 +3,7 @@ package introse.group20.hms.webapi.controllers;
 import introse.group20.hms.application.services.interfaces.ITreatmentPlanService;
 import introse.group20.hms.core.entities.TreatmentPlan;
 import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
 import introse.group20.hms.webapi.DTOs.TreatmentPlanDTO.TreatmentPlanRequest;
 import introse.group20.hms.webapi.DTOs.TreatmentPlanDTO.TreatmentPlanResponse;
 import introse.group20.hms.webapi.utils.AuthExtensions;
@@ -40,30 +41,38 @@ public class TreatmentPlanController {
         return new ResponseEntity<List<TreatmentPlanResponse>>(treatmentPlanResponses, HttpStatus.OK);
     }
 
-//    @GetMapping("/{id}")
-//    @Secured({"DOCTOR", "PATIENT"})
-//    public ResponseEntity<TreatmentPlanResponse> getById(@PathVariable UUID id){
-//
-//    }
-//
-    @PostMapping
-    @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> createTreatmentPlan(@Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
-        UUID doctorId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
-        TreatmentPlan treatmentPlan = modelMapper.map(request, TreatmentPlan.class);
-        treatmentPlanService.createTreatmentPlan(request.getPatientId(), doctorId, treatmentPlan);
-        return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
+    @GetMapping(value="/{id}", name = "getById")
+    @Secured({"DOCTOR", "PATIENT"})
+    public ResponseEntity<TreatmentPlanResponse> getById(@PathVariable UUID id) throws NotFoundException {
+        TreatmentPlan treatmentPlan = treatmentPlanService.getById(id);
+        TreatmentPlanResponse treatmentPlanResponse = modelMapper.map(treatmentPlan, TreatmentPlanResponse.class);
+        return new ResponseEntity<>(treatmentPlanResponse, HttpStatus.OK);
     }
 
-//    @PutMapping("/{id}")
-//    @Secured("DOCTOR")
-//    public ResponseEntity<HttpStatus> updateTreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest){
-//
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    @Secured("DOCTOR")
-//    public ResponseEntity<HttpStatus> deleteTreatmentPlan(@PathVariable UUID id){
-//
-//    }
+    @PostMapping
+    @Secured("DOCTOR")
+    public ResponseEntity<TreatmentPlanResponse> createTreatmentPlan(@Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
+        UUID doctorId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        TreatmentPlan treatmentPlan = modelMapper.map(request, TreatmentPlan.class);
+        TreatmentPlan newTreatmentPlan = treatmentPlanService.createTreatmentPlan(request.getPatientId(), doctorId, treatmentPlan);
+        TreatmentPlanResponse treatmentPlanResponse = modelMapper.map(newTreatmentPlan, TreatmentPlanResponse.class);
+        return new ResponseEntity<>(treatmentPlanResponse, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    @Secured("DOCTOR")
+    public ResponseEntity<TreatmentPlanResponse> updateTreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest treatmentPlanRequest) throws BadRequestException {
+        TreatmentPlan treatmentPlan = modelMapper.map(treatmentPlanRequest, TreatmentPlan.class);
+        treatmentPlan.setId(id);
+        TreatmentPlan updatedTreatmentPlan = treatmentPlanService.updateTreatmentPlan(treatmentPlan);
+        TreatmentPlanResponse treatmentPlanResponse = modelMapper.map(updatedTreatmentPlan, TreatmentPlanResponse.class);
+        return new ResponseEntity<>(treatmentPlanResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @Secured("DOCTOR")
+    public ResponseEntity<HttpStatus> deleteTreatmentPlan(@PathVariable UUID id) throws BadRequestException {
+        treatmentPlanService.deleteTreatmentPlan(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
