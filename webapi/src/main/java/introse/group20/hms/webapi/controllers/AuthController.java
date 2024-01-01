@@ -53,7 +53,7 @@ public class AuthController {
         String accessToken = jwtUtils.generateAccessToken(((UserPrincipal) authenticationObj.getPrincipal()).getId());
         UserPrincipal userPrincipal = (UserPrincipal) authenticationObj.getPrincipal();
         String refreshToken = refreshTokenService.generateRefreshToken(userPrincipal.getId());
-        return ResponseEntity.ok(new LoginResponse(userPrincipal.getId(), userPrincipal.getUsername(), accessToken, refreshToken));
+        return ResponseEntity.ok(new LoginResponse(userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getRole(), accessToken, refreshToken));
     }
 
     @PostMapping(value = "refreshToken", produces = MediaType.APPLICATION_JSON_VALUE)

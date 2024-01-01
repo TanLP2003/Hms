@@ -37,7 +37,7 @@ public class MessageService implements IMessageService {
     }
 
     @Override
-    public List<Message> getAllMessage() {
-        return messageAdapter.getAllMessagesAdapter();
+    public List<Message> getAllMessageOfUser(UUID userId) {
+        return messageAdapter.getAllMessagesOfUserAdapter(userId);
     }
 }

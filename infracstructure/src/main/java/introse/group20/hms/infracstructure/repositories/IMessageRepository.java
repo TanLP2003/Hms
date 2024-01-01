@@ -10,4 +10,5 @@ import java.util.UUID;
 
 public interface IMessageRepository extends JpaRepository<MessageModel, UUID> {
     List<MessageModel> findByConversationId(UUID conversationId);
+    List<MessageModel> findBySenderIdOrReceiverId(UUID senderId, UUID receiverId);
 }

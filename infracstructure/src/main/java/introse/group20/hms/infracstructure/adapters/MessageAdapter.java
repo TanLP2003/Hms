@@ -35,8 +35,8 @@ public class MessageAdapter implements IMessageAdapter {
     }
 
     @Override
-    public List<Message> getAllMessagesAdapter() {
-        List<MessageModel> messageModelList = messageRepository.findAll();
+    public List<Message> getAllMessagesOfUserAdapter(UUID userId) {
+        List<MessageModel> messageModelList = messageRepository.findBySenderIdOrReceiverId(userId, userId);
         return messageModelList.stream()
                 .map(messageModel -> modelMapper.map(messageModel, Message.class))
                 .collect(Collectors.toList());

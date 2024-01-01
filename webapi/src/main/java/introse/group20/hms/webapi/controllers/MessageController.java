@@ -4,12 +4,14 @@ import introse.group20.hms.application.services.interfaces.IMessageService;
 import introse.group20.hms.core.entities.Message;
 import introse.group20.hms.webapi.DTOs.MessageDTO.MessageDisplay;
 import introse.group20.hms.webapi.DTOs.MessageDTO.MessageRequest;
+import introse.group20.hms.webapi.utils.AuthExtensions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,8 +47,9 @@ public class MessageController {
         return ResponseEntity.ok(messageDisplayList);
     }
     @GetMapping("/getMessages")
-    public ResponseEntity<List<MessageDisplay>> getAllMessages(){
-        List<MessageDisplay> messageList = messageService.getAllMessage().stream()
+    public ResponseEntity<List<MessageDisplay>> getAllMessagesOfUser(){
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        List<MessageDisplay> messageList = messageService.getAllMessageOfUser(userId).stream()
                 .map(message -> modelMapper.map(message, MessageDisplay.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(messageList);
