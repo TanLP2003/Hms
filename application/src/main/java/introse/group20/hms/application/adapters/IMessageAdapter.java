@@ -12,4 +12,5 @@ public interface IMessageAdapter {
 //    Optional<Message> getLatestMessageAdapter(UUID doctorId, UUID patientId);
     Message saveMessage(Message message);
     List<Message> getConversationAdapter(UUID conversationId);
+    List<Message> getAllMessagesAdapter();
 }

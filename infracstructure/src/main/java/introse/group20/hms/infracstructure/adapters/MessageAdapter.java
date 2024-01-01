@@ -33,4 +33,12 @@ public class MessageAdapter implements IMessageAdapter {
                 .map(messageModel -> modelMapper.map(messageModel, Message.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Message> getAllMessagesAdapter() {
+        List<MessageModel> messageModelList = messageRepository.findAll();
+        return messageModelList.stream()
+                .map(messageModel -> modelMapper.map(messageModel, Message.class))
+                .collect(Collectors.toList());
+    }
 }

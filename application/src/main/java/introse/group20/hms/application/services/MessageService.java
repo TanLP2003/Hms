@@ -35,18 +35,9 @@ public class MessageService implements IMessageService {
         message.setConversationId(conversationID);
         return messageAdapter.saveMessage(message);
     }
-//    @Override
-//    public List<Message> getConversation(UUID patientId, UUID doctorId) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Message SendMessage(UUID doctorId, UUID patientId, Message message) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Message getLatestMessage(UUID doctorId, UUID patientId) {
-//        return null;
-//    }
+
+    @Override
+    public List<Message> getAllMessage() {
+        return messageAdapter.getAllMessagesAdapter();
+    }
 }

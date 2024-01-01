@@ -27,11 +27,7 @@ public class MessageController {
     IMessageService messageService;
     @MessageMapping("/sendMessage")
     public void sendMessage(@Payload MessageRequest messageRequest){
-        Message message = new Message();
-        message.setSenderId(messageRequest.getSenderId());
-        message.setReceiverId(messageRequest.getReceiverId());
-        message.setContent(messageRequest.getContent());
-        message.setTime(messageRequest.getTime());
+        Message message = modelMapper.map(messageRequest, Message.class);
         Message saveMessage = messageService.saveMessage(message);
         MessageDisplay response = modelMapper.map(saveMessage, MessageDisplay.class);
         messagingTemplate.convertAndSendToUser(message.getReceiverId().toString(), "/queue/messages", response);
@@ -47,5 +43,12 @@ public class MessageController {
                 .map(message -> modelMapper.map(message, MessageDisplay.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(messageDisplayList);
+    }
+    @GetMapping("/getMessages")
+    public ResponseEntity<List<MessageDisplay>> getAllMessages(){
+        List<MessageDisplay> messageList = messageService.getAllMessage().stream()
+                .map(message -> modelMapper.map(message, MessageDisplay.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(messageList);
     }
 }

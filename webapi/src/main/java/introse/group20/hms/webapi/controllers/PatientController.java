@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,12 +28,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/patients")
 public class PatientController {
     @Autowired
     private IPatientService patientService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    SimpMessagingTemplate simpMessagingTemplate;
     @RequestMapping(method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("DOCTOR")
     @Transactional
@@ -42,6 +46,7 @@ public class PatientController {
         patient.setGender(Gender.valueOf(patientRequest.getGender()));
         User user = patientService.addPatient(patient);
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        simpMessagingTemplate.convertAndSend("/topic/doctor", userDTO);
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }
 

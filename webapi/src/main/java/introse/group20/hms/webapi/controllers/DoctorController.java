@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +36,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
+@CrossOrigin("*")
 @Validated
 public class DoctorController {
     @Autowired
@@ -49,6 +51,8 @@ public class DoctorController {
     private IUserService userService;
     @Autowired
     private PasswordEncoder encoder;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
     @RequestMapping(path = "/api/doctors/", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("ADMIN")
     @Transactional
@@ -65,6 +69,7 @@ public class DoctorController {
         doctor.setGender(Gender.valueOf(doctorRequest.getGender()));
         User user = doctorService.addDoctor(doctorRequest.getDepartmentId(), doctor);
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        simpMessagingTemplate.convertAndSend("/topic/patient", userDTO);
 //        smsService.sendSms(userDTO.getUsername(), userDTO.getPassword());
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }

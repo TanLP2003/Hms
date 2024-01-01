@@ -10,6 +10,8 @@ import java.util.UUID;
 @Data
 public class MessageRequest {
     @NotNull
+    private UUID id;
+    @NotNull
     private UUID senderId;
     @NotNull
     private UUID receiverId;
