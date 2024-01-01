@@ -53,7 +53,6 @@ public class SurgeryController {
         Surgery surgery=modelMapper.map(surgeryRequest,Surgery.class);
         Surgery surgery1 = surgeryService.addSurgery(surgeryRequest.getDoctorId(),surgeryRequest.getPatientId(),surgery);
         SurgeryResponse surgeryResponse=modelMapper.map(surgery1,SurgeryResponse.class);
-        System.out.println(surgery1.getId()+"   "+surgery1.getDoctor()+"   "+ surgery1.getPatient()+"   ");
         return new ResponseEntity<SurgeryResponse>(surgeryResponse,HttpStatus.CREATED);
     }
 
