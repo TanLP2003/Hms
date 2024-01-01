@@ -52,8 +52,8 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
-    public void deleteDoctor(UUID doctorId) {
-
+    public void deleteDoctor(UUID doctorId) throws BadRequestException {
+        doctorAdapter.deleteDoctorAdapter(doctorId);
     }
     @Override
     public void test()

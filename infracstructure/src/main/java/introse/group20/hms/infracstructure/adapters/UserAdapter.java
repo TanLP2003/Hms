@@ -2,10 +2,12 @@ package introse.group20.hms.infracstructure.adapters;
 
 import introse.group20.hms.application.adapters.IUserAdapter;
 import introse.group20.hms.core.entities.User;
+import introse.group20.hms.core.exceptions.BadRequestException;
 import introse.group20.hms.infracstructure.models.UserModel;
 import introse.group20.hms.infracstructure.repositories.IUserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -14,6 +16,8 @@ import java.util.UUID;
 public class UserAdapter implements IUserAdapter {
     @Autowired
     private IUserRepository userRepository;
+    @Autowired
+    private PasswordEncoder encoder;
     @Autowired
     private ModelMapper modelMapper;
     @Override
@@ -24,8 +28,11 @@ public class UserAdapter implements IUserAdapter {
     }
 
     @Override
-    public boolean updatePasswordAdapter(String phoneNumber, String oldPassword, String newPassword) {
-        return false;
+    public void updatePasswordAdapter(String phoneNumber, String newPassword) throws BadRequestException {
+        UserModel userModel = userRepository.findByUsername(phoneNumber)
+                .orElseThrow(() -> new BadRequestException("Incorrect login credentials"));
+        userModel.setPassword(encoder.encode(newPassword));
+        userRepository.save(userModel);
     }
 
     @Override
@@ -44,24 +51,4 @@ public class UserAdapter implements IUserAdapter {
         return userRepository.findByUsername(username)
                 .map(userModel -> modelMapper.map(userModel, User.class));
     }
-
-//    @Override
-//    public Optional<User> LoginAdapter(String phoneNumber, String password) {
-//        return Optional.empty();
-//    }
-//
-//    @Override
-//    public Optional<User> addUserAdapter(User user) {
-//        return Optional.empty();
-//    }
-//
-//    @Override
-//    public boolean updatePasswordAdapter(String phoneNumber, String oldPassword, String newPassword) {
-//        return false;
-//    }
-//
-//    @Override
-//    public void SendAccountAdapter(String phoneNumber, User userAccount) {
-//
-//    }
 }

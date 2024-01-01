@@ -4,6 +4,7 @@ import introse.group20.hms.application.adapters.ITreatmentPlanAdapter;
 import introse.group20.hms.application.services.interfaces.ITreatmentPlanService;
 import introse.group20.hms.core.entities.TreatmentPlan;
 import introse.group20.hms.core.exceptions.BadRequestException;
+import introse.group20.hms.core.exceptions.NotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,22 +22,23 @@ public class TreatmentPlanService implements ITreatmentPlanService {
     }
 
     @Override
-    public TreatmentPlan getById(UUID id) {
-        return null;
+    public TreatmentPlan getById(UUID id) throws NotFoundException {
+        return iTreatmentPlanAdapter.getByIdAdapter(id)
+                .orElseThrow(() -> new NotFoundException(String.format("TreatmentPlan with id: %s not exist", id)));
     }
 
     @Override
-    public void createTreatmentPlan(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
-        iTreatmentPlanAdapter.createTreatmentPlanAdapter(patientId, doctorId, treatmentPlan);
+    public TreatmentPlan createTreatmentPlan(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException {
+        return iTreatmentPlanAdapter.createTreatmentPlanAdapter(patientId, doctorId, treatmentPlan);
     }
 
     @Override
-    public void deleteTreatmentPlan(UUID id) {
-
+    public void deleteTreatmentPlan(UUID userId, UUID id) throws BadRequestException {
+        iTreatmentPlanAdapter.deleteTreatmentPlanAdapter(userId, id);
     }
 
     @Override
-    public void updateTreatmentPlan(TreatmentPlan treatmentPlan) {
-
+    public void updateTreatmentPlan(UUID userId, TreatmentPlan treatmentPlan) throws BadRequestException {
+        iTreatmentPlanAdapter.updateTreatmentPlanAdapter(userId, treatmentPlan);
     }
 }

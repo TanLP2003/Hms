@@ -1,5 +1,6 @@
 package introse.group20.hms.webapi.DTOs.MedicalRecordDTO;
 
+import introse.group20.hms.webapi.DTOs.TreatmentPlanDTO.TreatmentPlanResponse;
 import lombok.Data;
 
 import java.util.Date;
@@ -7,6 +8,7 @@ import java.util.UUID;
 
 @Data
 public class MedicalRecordResponse {
+    private UUID id;
     private UUID doctorId;
     private String doctorName;
     private UUID patientId;
@@ -24,4 +26,5 @@ public class MedicalRecordResponse {
     private String hospitalDischargeStatus;
     private String stayType;
     private String note;
+    private TreatmentPlanResponse treatmentPlan;
 }

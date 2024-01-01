@@ -1,6 +1,7 @@
 package introse.group20.hms.webapi.controllers;
 
 import introse.group20.hms.application.services.interfaces.IDoctorService;
+import introse.group20.hms.application.services.interfaces.ISendSmsService;
 import introse.group20.hms.application.services.interfaces.IUserService;
 import introse.group20.hms.application.services.uploads.IUploadService;
 import introse.group20.hms.core.entities.Doctor;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -31,10 +33,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
+@CrossOrigin("*")
 @Validated
 public class DoctorController {
+    @Autowired
+    private ISendSmsService smsService;
     @Autowired
     private IDoctorService doctorService;
     @Autowired
@@ -45,6 +51,8 @@ public class DoctorController {
     private IUserService userService;
     @Autowired
     private PasswordEncoder encoder;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
     @RequestMapping(path = "/api/doctors/", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("ADMIN")
     @Transactional
@@ -56,11 +64,13 @@ public class DoctorController {
         }
         else url = uploadService.upload(doctorRequest.getImage().getBytes(), doctorRequest.getImage().getOriginalFilename(), "avatars");
         Doctor doctor = new Doctor();
+        modelMapper.map(doctorRequest, doctor);
         doctor.setImage(url);
         doctor.setGender(Gender.valueOf(doctorRequest.getGender()));
-        modelMapper.map(doctorRequest, doctor);
         User user = doctorService.addDoctor(doctorRequest.getDepartmentId(), doctor);
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        simpMessagingTemplate.convertAndSend("/topic/patient", userDTO);
+//        smsService.sendSms(userDTO.getUsername(), userDTO.getPassword());
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }
     @GetMapping("/doctors")
@@ -90,14 +100,13 @@ public class DoctorController {
     }
     @DeleteMapping("/api/doctors/{doctorId}")
     @Secured("ADMIN")
-    public ResponseEntity<HttpStatus> deleteDoctor(@PathVariable UUID doctorId)
-    {
+    public ResponseEntity<HttpStatus> deleteDoctor(@PathVariable UUID doctorId) throws BadRequestException {
         doctorService.deleteDoctor(doctorId);
         return new ResponseEntity<HttpStatus>(HttpStatus.OK);
     }
-    @PutMapping("/api/doctors/{doctorId}")
+    @RequestMapping(path = "/api/doctors/{doctorId}", method = PUT, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("ADMIN")
-    public ResponseEntity<HttpStatus> updateDoctor(@PathVariable UUID doctorId,@Valid @RequestBody DoctorRequest doctorRequest)
+    public ResponseEntity<HttpStatus> updateDoctor(@PathVariable UUID doctorId,@Valid @ModelAttribute DoctorRequest doctorRequest)
     {
         Doctor doctor = modelMapper.map(doctorRequest, Doctor.class);
         doctor.setId(doctorId);

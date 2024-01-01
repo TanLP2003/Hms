@@ -15,5 +15,5 @@ public class PostResponse {
     private String cover;
     private String coverContent;
     private UUID categoryId;
-    private String category;
+    private String categoryName;
 }

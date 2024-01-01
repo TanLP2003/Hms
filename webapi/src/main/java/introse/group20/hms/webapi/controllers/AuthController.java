@@ -5,6 +5,7 @@ import introse.group20.hms.application.services.interfaces.IUserService;
 import introse.group20.hms.application.utils.IJwtUtils;
 import introse.group20.hms.core.entities.RefreshToken;
 import introse.group20.hms.core.entities.User;
+import introse.group20.hms.core.exceptions.BadRequestException;
 import introse.group20.hms.core.exceptions.ErrorMessage;
 import introse.group20.hms.core.exceptions.RefreshTokenException;
 import introse.group20.hms.webapi.DTOs.AuthDTO.*;
@@ -52,7 +53,7 @@ public class AuthController {
         String accessToken = jwtUtils.generateAccessToken(((UserPrincipal) authenticationObj.getPrincipal()).getId());
         UserPrincipal userPrincipal = (UserPrincipal) authenticationObj.getPrincipal();
         String refreshToken = refreshTokenService.generateRefreshToken(userPrincipal.getId());
-        return ResponseEntity.ok(new LoginResponse(userPrincipal.getUsername(), accessToken, refreshToken));
+        return ResponseEntity.ok(new LoginResponse(userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getRole(), accessToken, refreshToken));
     }
 
     @PostMapping(value = "refreshToken", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,5 +72,14 @@ public class AuthController {
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         refreshTokenService.deleteByUserId(userId);
         return new ResponseEntity<MessageResponse>(new MessageResponse("Logout successfully!"), HttpStatus.OK);
+    }
+
+    @PutMapping("/change_password")
+    public ResponseEntity<HttpStatus> changePassword(@Valid @RequestBody UpdatePasswordRequest request) throws BadRequestException {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(),request.getOldPassword())
+        );
+        userService.updatePassword(request.getUsername(), request.getNewPassword());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

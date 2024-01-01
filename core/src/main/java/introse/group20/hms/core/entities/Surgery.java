@@ -7,7 +7,7 @@ public class Surgery {
     private UUID id;
     private Date time;
     private String content;
-    private Date expectedTime;
+    private float expectedTime;
     private Doctor doctor;
     private Patient patient;
 
@@ -35,11 +35,11 @@ public class Surgery {
         this.content = content;
     }
 
-    public Date getExpectedTime() {
+    public float getExpectedTime() {
         return expectedTime;
     }
 
-    public void setExpectedTime(Date expectedTime) {
+    public void setExpectedTime(float expectedTime) {
         this.expectedTime = expectedTime;
     }
 

@@ -5,12 +5,11 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class MessageReponse {
+public class MessageDisplay {
     private UUID id;
-    private UUID doctorId;
-    private String doctorName;
-    private String patientName;
-    private UUID patientId;
-    private Date time;
+//    private UUID conversationId;
+    private UUID senderId;
+    private UUID receiverId;
     private String content;
+    private Date time;
 }

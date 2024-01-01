@@ -17,7 +17,7 @@ public class SurgeryModel {
     private UUID id;
     private Date time;
     private String content;
-    private Date expectedTime;
+    private float expectedTime;
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private DoctorModel doctor;

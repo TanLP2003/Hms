@@ -18,4 +18,6 @@ public class TreatmentPlanRequest {
     @NotNull
     private Date nextExpectedExaminationDay;
     private String note;
+    @NotNull
+    private UUID medicalRecordId;
 }

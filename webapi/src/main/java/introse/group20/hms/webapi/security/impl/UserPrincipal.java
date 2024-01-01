@@ -3,6 +3,7 @@ package introse.group20.hms.webapi.security.impl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import introse.group20.hms.webapi.DTOs.AuthDTO.UserDTO;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,12 +19,17 @@ public class UserPrincipal implements UserDetails{
     private String username;
     @JsonIgnore
     private String password;
+    @Getter
+    @Setter
+    private String role;
     private Collection<? extends GrantedAuthority> authorities;
     public UserPrincipal(UUID id, String username, String password,
+                           String role,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.role = role;
         this.authorities = authorities;
     }
 
@@ -33,9 +39,9 @@ public class UserPrincipal implements UserDetails{
         return new UserPrincipal(user.getId(),
                 user.getUsername(),
                 user.getPassword(),
+                user.getRole().toString(),
                 authorities);
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

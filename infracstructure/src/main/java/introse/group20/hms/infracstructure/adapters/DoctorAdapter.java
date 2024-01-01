@@ -100,8 +100,10 @@ public class DoctorAdapter implements IDoctorAdapter {
     }
 
     @Override
-    public void deleteDoctorAdapter(UUID doctorId) {
-
+    public void deleteDoctorAdapter(UUID doctorId) throws BadRequestException {
+        DoctorModel doctorModel = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new BadRequestException(String.format("Doctor with id: %s not exist", doctorId)));
+        doctorRepository.delete(doctorModel);
     }
     @Override
     @Transactional

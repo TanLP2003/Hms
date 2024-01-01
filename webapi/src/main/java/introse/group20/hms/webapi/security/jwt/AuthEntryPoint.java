@@ -25,7 +25,6 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
         // redirect to Login page
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
         final Map<String, Object> body = new HashMap<>();
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("message", authException.getMessage());

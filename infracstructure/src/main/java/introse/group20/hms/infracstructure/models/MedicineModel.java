@@ -34,7 +34,7 @@ public class MedicineModel {
     private boolean beforeBreakfast;
     private boolean beforeLunch;
     private boolean beforeDinner;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "prescription_id")
     private PrescriptionModel prescription;
 }
