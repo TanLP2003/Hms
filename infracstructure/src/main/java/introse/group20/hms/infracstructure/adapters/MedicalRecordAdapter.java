@@ -9,10 +9,7 @@ import introse.group20.hms.infracstructure.models.DoctorModel;
 import introse.group20.hms.infracstructure.models.MedicalRecordModel;
 import introse.group20.hms.infracstructure.models.PatientModel;
 import introse.group20.hms.infracstructure.models.enums.StayType;
-import introse.group20.hms.infracstructure.repositories.IDepartmentRepository;
-import introse.group20.hms.infracstructure.repositories.IDoctorRepository;
-import introse.group20.hms.infracstructure.repositories.IMedicalRecordRepository;
-import introse.group20.hms.infracstructure.repositories.IPatientRepository;
+import introse.group20.hms.infracstructure.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +24,8 @@ public class MedicalRecordAdapter implements IMedicalRecordAdapter {
 
     @Autowired
     private IMedicalRecordRepository iMedicalRecordRepository;
+    @Autowired
+    private ITreatmentPlanRepository iTreatmentPlanRepository;
 
     @Autowired
     private IPatientRepository iPatientRepository;

@@ -46,4 +46,6 @@ public class MedicalRecordModel {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id")
     private DoctorModel doctor;
+    @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL)
+    private TreatmentPlanModel treatmentPlan;
 }

@@ -1,5 +1,6 @@
 package introse.group20.hms.webapi.DTOs.MedicalRecordDTO;
 
+import introse.group20.hms.webapi.DTOs.TreatmentPlanDTO.TreatmentPlanRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -36,4 +37,5 @@ public class MedicalRecordRequest {
     @Pattern(regexp = "^(STAY|NOT_STAY|DAYTIME_STAY)$")
     private String stayType;
     private String note;
+    private TreatmentPlanRequest treatmentPlan;
 }

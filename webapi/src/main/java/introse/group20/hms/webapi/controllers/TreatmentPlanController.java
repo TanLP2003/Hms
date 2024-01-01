@@ -87,7 +87,8 @@ public class TreatmentPlanController {
                 treatmentPlan.getTreatmentMethod(),
                 treatmentPlan.getLastExaminationDay(),
                 treatmentPlan.getNextExpectedExaminationDay(),
-                treatmentPlan.getNote()
+                treatmentPlan.getNote(),
+                treatmentPlan.getMedicalRecordId()
         );
     }
 }

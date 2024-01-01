@@ -46,7 +46,7 @@ public class MessageController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(messageDisplayList);
     }
-    @GetMapping("/getMessages")
+    @GetMapping("/getMessagesOfUser")
     public ResponseEntity<List<MessageDisplay>> getAllMessagesOfUser(){
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         List<MessageDisplay> messageList = messageService.getAllMessageOfUser(userId).stream()

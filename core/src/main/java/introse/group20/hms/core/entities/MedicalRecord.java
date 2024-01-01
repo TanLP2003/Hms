@@ -21,6 +21,15 @@ public class MedicalRecord {
     private Doctor doctor;
     private Patient patient;
     private Department department;
+    private TreatmentPlan treatmentPlan;
+
+    public TreatmentPlan getTreatmentPlan() {
+        return treatmentPlan;
+    }
+
+    public void setTreatmentPlan(TreatmentPlan treatmentPlan) {
+        this.treatmentPlan = treatmentPlan;
+    }
 
     public UUID getId() {
         return id;

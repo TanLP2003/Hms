@@ -11,6 +11,15 @@ public class TreatmentPlan {
     private String note;
     private Doctor doctor;
     private Patient patient;
+    private UUID medicalRecordId;
+
+    public UUID getMedicalRecordId() {
+        return medicalRecordId;
+    }
+
+    public void setMedicalRecordId(UUID medicalRecordId) {
+        this.medicalRecordId = medicalRecordId;
+    }
 
     public UUID getId() {
         return id;

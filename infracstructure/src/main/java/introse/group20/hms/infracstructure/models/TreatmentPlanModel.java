@@ -26,4 +26,7 @@ public class TreatmentPlanModel {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private DoctorModel doctor;
+    @OneToOne
+    @JoinColumn(name = "medical_record_id")
+    private MedicalRecordModel medicalRecord;
 }

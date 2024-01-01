@@ -20,4 +20,5 @@ public class TreatmentPlanResponse {
     private Date lastExaminationDay;
     private Date nextExpectedExaminationDay;
     private String note;
+    private UUID medicalRecordId;
 }
