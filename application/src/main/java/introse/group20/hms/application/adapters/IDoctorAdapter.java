@@ -11,11 +11,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IDoctorAdapter {
-    List<Doctor> getAllDoctorsAdapter();
-    List<Doctor> getByDepartmentIdAdapter(UUID departmentId);
+    List<Doctor> getAllDoctorsAdapter(int pageNo, int pageSize);
+    List<Doctor> getByDepartmentIdAdapter(UUID departmentId, int pageNo, int pageSize);
     Optional<Doctor> getByIdAdapter(UUID id) ;
     User addDoctorAdapter(UUID departmentId, Doctor doctor) throws BadRequestException;
-    void updateDoctorAdapter(Doctor doctor);
+    void updateDoctorAdapter(Doctor doctor) throws BadRequestException;
     void deleteDoctorAdapter(UUID doctorId) throws BadRequestException;
     void test();
 }

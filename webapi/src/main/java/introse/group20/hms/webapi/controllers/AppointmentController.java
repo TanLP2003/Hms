@@ -33,8 +33,12 @@ public class AppointmentController {
     @GetMapping(value = "/doctor", name = "getForDoctor")
     @Secured("DOCTOR")
     //route" /api/appointments/doctor
-    public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfDoctor(@RequestParam UUID doctorId){
-        List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByDoctor(doctorId).stream()
+    public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfDoctor(
+            @RequestParam UUID doctorId,
+            @RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize
+    ){
+        List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByDoctor(doctorId, pageNo - 1, pageSize).stream()
                 .map(this::mapToApmResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(appointmentResponses);
@@ -43,8 +47,12 @@ public class AppointmentController {
     @GetMapping(value = "/patient", name = "getForPatient")
     @Secured("PATIENT")
         //route" /api/appointments/patient
-    public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfPatient(@RequestParam UUID patientId){
-        List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByPatient(patientId).stream()
+    public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfPatient(
+            @RequestParam UUID patientId,
+            @RequestParam(defaultValue = "1")int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize
+    ){
+        List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByPatient(patientId, pageNo - 1, pageSize).stream()
                 .map(this::mapToApmResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(appointmentResponses);

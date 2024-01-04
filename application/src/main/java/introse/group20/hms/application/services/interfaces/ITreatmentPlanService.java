@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ITreatmentPlanService {
-    List<TreatmentPlan> getForUser(UUID userId);
+    List<TreatmentPlan> getForUser(UUID userId, int pageNo, int pageSize);
     TreatmentPlan getById(UUID id) throws NotFoundException;
     TreatmentPlan createTreatmentPlan(UUID patientId,UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException;
     void deleteTreatmentPlan(UUID userId, UUID id) throws BadRequestException;

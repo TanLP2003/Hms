@@ -31,8 +31,12 @@ public class VoteController {
 
     @GetMapping("/votes/doctor")
     //route: /api/votes/doctor?doctorId=<id of doctor>
-    public ResponseEntity<List<VoteResponse>> getDoctorVotes(@RequestParam UUID doctorId) {
-        List<Vote> votes = voteService.getDoctorVote(doctorId);
+    public ResponseEntity<List<VoteResponse>> getDoctorVotes(
+            @RequestParam UUID doctorId,
+            @RequestParam(defaultValue = "1")int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    ) {
+        List<Vote> votes = voteService.getDoctorVote(doctorId, pageNo - 1, pageSize);
         List<VoteResponse> voteResponses = votes.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());

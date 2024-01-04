@@ -11,6 +11,7 @@ import introse.group20.hms.infracstructure.repositories.IPatientRepository;
 import introse.group20.hms.infracstructure.repositories.IVoteRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,8 +35,9 @@ public class VoteAdapter implements IVoteAdapter {
     private ModelMapper modelMapper;
 
     @Override
-    public List<Vote> getDoctorVoteAdapter(UUID doctorId) {
-        List<VoteModel> voteModels = iVoteRepository.findByDoctorId(doctorId);
+    public List<Vote> getDoctorVoteAdapter(UUID doctorId, int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        List<VoteModel> voteModels = iVoteRepository.findByDoctorId(doctorId, pageRequest);
         return voteModels.stream()
                 .map(voteModel -> modelMapper.map(voteModel, Vote.class))
                 .collect(Collectors.toList());

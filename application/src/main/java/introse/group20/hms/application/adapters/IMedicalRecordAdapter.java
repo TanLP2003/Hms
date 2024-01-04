@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IMedicalRecordAdapter {
-    List<MedicalRecord> getByPatientIdAdapter(UUID patientId);
+    List<MedicalRecord> getByPatientIdAdapter(UUID patientId, int pageNo, int pageSize);
     Optional<MedicalRecord> getByIdAdapter(UUID mrId) throws NotFoundException;
     MedicalRecord addMedicalRecordAdapter(UUID doctorId, UUID departmentId, UUID patientId, MedicalRecord medicalRecord) throws BadRequestException;
     void updateMedicalRecordAdapter(UUID userId, MedicalRecord medicalRecord) throws BadRequestException;

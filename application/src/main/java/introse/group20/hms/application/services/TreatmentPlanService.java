@@ -16,9 +16,9 @@ public class TreatmentPlanService implements ITreatmentPlanService {
         this.iTreatmentPlanAdapter = iTreatmentPlanAdapter;
     }
     @Override
-    public List<TreatmentPlan> getForUser(UUID userId)
+    public List<TreatmentPlan> getForUser(UUID userId, int pageNo, int pageSize)
     {
-        return iTreatmentPlanAdapter.getForUserAdapter(userId);
+        return iTreatmentPlanAdapter.getForUserAdapter(userId, pageNo, pageSize);
     }
 
     @Override

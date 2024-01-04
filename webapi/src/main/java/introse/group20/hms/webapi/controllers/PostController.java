@@ -39,8 +39,11 @@ public class PostController {
     @Autowired
     private IUploadService uploadService;
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponse>> getAllPost(){
-        List<Post> posts = postService.getAll();
+    public ResponseEntity<List<PostResponse>> getAllPost(
+            @RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    ){
+        List<Post> posts = postService.getAll(pageNo - 1, pageSize);
         List<PostResponse> postDTOS = posts.stream()
                 .map(post -> modelMapper.map(post, PostResponse.class))
                 .collect(Collectors.toList());
@@ -49,8 +52,12 @@ public class PostController {
 
     @GetMapping(value = "/posts/doctor", name = "getByDoctor")
     //route: /posts/doctor?doctorId=<id of doctor>
-    public ResponseEntity<List<PostResponse>> getPostOfDoctor(@RequestParam UUID doctorId){
-        List<Post> posts = postService.getPostOfDoctor(doctorId);
+    public ResponseEntity<List<PostResponse>> getPostOfDoctor(
+            @RequestParam UUID doctorId,
+            @RequestParam(defaultValue = "1")int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    ){
+        List<Post> posts = postService.getPostOfDoctor(doctorId, pageNo, pageSize);
         List<PostResponse> postDTOS = posts.stream()
                 .map(post -> modelMapper.map(post,PostResponse.class))
                 .collect(Collectors.toList());
@@ -59,8 +66,12 @@ public class PostController {
 
     @GetMapping(value = "/posts/category", name = "getByCategory")
         //route: /posts/category?categoryId=<if of category>
-    public ResponseEntity<List<PostResponse>> getPostOfCategory(@RequestParam UUID categoryId){
-        List<Post> posts = postService.getPostByCategory(categoryId);
+    public ResponseEntity<List<PostResponse>> getPostOfCategory(
+            @RequestParam UUID categoryId,
+            @RequestParam(defaultValue = "1")int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    ){
+        List<Post> posts = postService.getPostByCategory(categoryId, pageNo - 1, pageSize);
         List<PostResponse> postDTOS = posts.stream()
                 .map(post -> modelMapper.map(post,PostResponse.class))
                 .collect(Collectors.toList());
@@ -79,7 +90,7 @@ public class PostController {
     @Secured("DOCTOR")
     public ResponseEntity<PostResponse> createPost(@Valid @ModelAttribute PostRequest postRequest) throws IOException,BadRequestException {
         String url;
-        if (postRequest.getCover() != null && !postRequest.getCover().isEmpty()){
+        if (!postRequest.getCover().isEmpty()){
             url = uploadService.upload(postRequest.getCover().getBytes(), postRequest.getCover().getOriginalFilename(),"postCovers");
         }
         else url = DefaultImage.POST;

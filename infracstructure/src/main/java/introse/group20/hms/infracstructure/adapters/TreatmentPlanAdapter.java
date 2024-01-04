@@ -14,6 +14,8 @@ import introse.group20.hms.infracstructure.repositories.ITreatmentPlanRepository
 import jakarta.persistence.EntityManager;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,8 +36,9 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
     @Autowired
     private ModelMapper modelMapper;
     @Override
-    public List<TreatmentPlan> getForUserAdapter(UUID userId) {
-        List<TreatmentPlanModel> treatmentPlanModels = treatmentPlanRepository.findByPatientId(userId);
+    public List<TreatmentPlan> getForUserAdapter(UUID userId, int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        List<TreatmentPlanModel> treatmentPlanModels = treatmentPlanRepository.findByPatientId(userId, pageRequest);
         return treatmentPlanModels.stream()
                 .map(treatmentPlanModel -> modelMapper.map(treatmentPlanModel, TreatmentPlan.class))
                 .collect(Collectors.toList());

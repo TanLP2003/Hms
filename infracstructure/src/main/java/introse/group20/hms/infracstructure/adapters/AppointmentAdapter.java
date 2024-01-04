@@ -13,6 +13,7 @@ import introse.group20.hms.infracstructure.repositories.IDoctorRepository;
 import introse.group20.hms.infracstructure.repositories.IPatientRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -38,15 +39,17 @@ public class AppointmentAdapter implements IAppointmentAdapter {
     }
 
     @Override
-    public List<Appointment> getAppointmentByDoctorAdapter(UUID doctorId) {
-        return appointmentRepository.findByDoctorId(doctorId).stream()
+    public List<Appointment> getAppointmentByDoctorAdapter(UUID doctorId, int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        return appointmentRepository.findByDoctorId(doctorId, pageRequest).stream()
                 .map(appointmentModel -> modelMapper.map(appointmentModel, Appointment.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Appointment> getAppointmentByPatientAdapter(UUID patientId) {
-        return appointmentRepository.findByPatientId(patientId).stream()
+    public List<Appointment> getAppointmentByPatientAdapter(UUID patientId, int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        return appointmentRepository.findByPatientId(patientId, pageRequest).stream()
                 .map(appointmentModel -> modelMapper.map(appointmentModel, Appointment.class))
                 .collect(Collectors.toList());
     }
