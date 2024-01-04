@@ -13,8 +13,8 @@ public class PrescriptionService implements IPrescriptionService {
     private IPrescriptionAdapter prescriptionAdapter;
     public PrescriptionService(IPrescriptionAdapter prescriptionAdapter){this.prescriptionAdapter = prescriptionAdapter;}
     @Override
-    public List<Prescription> getByPatient(UUID patientId) {
-        return prescriptionAdapter.getByPatientAdapter(patientId);
+    public List<Prescription> getByPatient(UUID patientId, int pageNo, int pageSize) {
+        return prescriptionAdapter.getByPatientAdapter(patientId, pageNo, pageSize);
     }
 
     @Override

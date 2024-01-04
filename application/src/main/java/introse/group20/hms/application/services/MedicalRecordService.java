@@ -19,8 +19,8 @@ public class MedicalRecordService implements IMedicalRecordService {
     }
 
     @Override
-    public List<MedicalRecord> getByPatientId(UUID patientId) {
-        return iMedicalRecordAdapter.getByPatientIdAdapter(patientId);
+    public List<MedicalRecord> getByPatientId(UUID patientId, int pageNo, int pageSize) {
+        return iMedicalRecordAdapter.getByPatientIdAdapter(patientId, pageNo, pageSize);
     }
 
     @Override

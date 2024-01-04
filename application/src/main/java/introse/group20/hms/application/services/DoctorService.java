@@ -8,6 +8,7 @@ import introse.group20.hms.core.entities.User;
 import introse.group20.hms.core.exceptions.BadRequestException;
 import introse.group20.hms.core.exceptions.NotFoundException;
 
+import javax.print.Doc;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,14 +21,14 @@ public class DoctorService implements IDoctorService {
         this.doctorAdapter = doctorAdapter;
     }
     @Override
-    public List<Doctor> getAll() {
-        return doctorAdapter.getAllDoctorsAdapter();
+    public List<Doctor> getAll(int pageNo, int pageSize) {
+        return doctorAdapter.getAllDoctorsAdapter(pageNo, pageSize);
     }
 
     @Override
-    public List<Doctor> getByDepartment(UUID departmentId)
+    public List<Doctor> getByDepartment(UUID departmentId, int pageNo, int pageSize)
     {
-        return doctorAdapter.getByDepartmentIdAdapter(departmentId);
+        return doctorAdapter.getByDepartmentIdAdapter(departmentId, pageNo, pageSize);
     }
 
     @Override
@@ -46,8 +47,7 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
-    public void updateDoctor(Doctor doctor)
-    {
+    public void updateDoctor(Doctor doctor) throws BadRequestException {
         doctorAdapter.updateDoctorAdapter(doctor);
     }
 
