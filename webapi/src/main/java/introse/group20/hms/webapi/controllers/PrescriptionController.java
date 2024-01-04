@@ -39,9 +39,11 @@ public class PrescriptionController {
     @GetMapping
     @Secured({"DOCTOR", "PATIENT"})
     public ResponseEntity<List<PrescriptionResponse>> getByPatient(
-            @RequestParam(name = "patient_id") UUID patientId
+            @RequestParam(name = "patient_id") UUID patientId,
+            @RequestParam(defaultValue = "1")int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
     ){
-        List<PrescriptionResponse> response =  prescriptionService.getByPatient(patientId).stream()
+        List<PrescriptionResponse> response =  prescriptionService.getByPatient(patientId, pageNo - 1, pageSize).stream()
                 .map(this::mapToPrescriptionResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);

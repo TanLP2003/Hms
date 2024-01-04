@@ -15,6 +15,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -38,17 +41,19 @@ public class DoctorAdapter implements IDoctorAdapter {
     @Autowired
     private PasswordEncoder encoder;
     @Override
-    public List<Doctor> getAllDoctorsAdapter() {
-        List<DoctorModel> list = doctorRepository.findAll();
+    public List<Doctor> getAllDoctorsAdapter(int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        Page<DoctorModel> list = doctorRepository.findAll(pageRequest);
         return list.stream()
                 .map(doctorModel -> doctorMapperInfra.mapToDoctor(doctorModel))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Doctor> getByDepartmentIdAdapter(UUID departmentId)
+    public List<Doctor> getByDepartmentIdAdapter(UUID departmentId, int pageNo, int pageSize)
     {
-        List<DoctorModel> doctors = doctorRepository.findByDepartmentId(departmentId);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        List<DoctorModel> doctors = doctorRepository.findByDepartmentId(departmentId, pageRequest);
         return doctors.stream()
                 .map(doctorModel -> doctorMapperInfra.mapToDoctor(doctorModel))
                 .collect(Collectors.toList());
@@ -93,10 +98,14 @@ public class DoctorAdapter implements IDoctorAdapter {
     }
 
     @Override
-    public void updateDoctorAdapter(Doctor doctor)
-    {
-        DoctorModel doctorModel = modelMapper.map(doctor, DoctorModel.class);
-        doctorRepository.save(doctorModel);
+    public void updateDoctorAdapter(Doctor doctor) throws BadRequestException {
+        DoctorModel doctorModel = doctorRepository.findById(doctor.getId())
+                .orElseThrow(() -> new BadRequestException(String.format("Doctor with id: %s not exist", doctor.getId())));
+        DoctorModel newDoctorModel = modelMapper.map(doctor, DoctorModel.class);
+        if(doctor.getImage() == null){
+            newDoctorModel.setImage(doctorModel.getImage());
+        }
+        doctorRepository.save(newDoctorModel);
     }
 
     @Override

@@ -12,6 +12,7 @@ import introse.group20.hms.infracstructure.models.enums.StayType;
 import introse.group20.hms.infracstructure.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -39,8 +40,9 @@ public class MedicalRecordAdapter implements IMedicalRecordAdapter {
     private ModelMapper modelMapper;
 
     @Override
-    public List<MedicalRecord> getByPatientIdAdapter(UUID patientId) {
-        List<MedicalRecordModel> medicalRecordModels = iMedicalRecordRepository.findByPatientId(patientId);
+    public List<MedicalRecord> getByPatientIdAdapter(UUID patientId, int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        List<MedicalRecordModel> medicalRecordModels = iMedicalRecordRepository.findByPatientId(patientId, pageRequest);
         return medicalRecordModels.stream()
                 .map(medicalRecordModel -> modelMapper.map(medicalRecordModel, MedicalRecord.class))
                 .collect(Collectors.toList());

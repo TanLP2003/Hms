@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IVoteAdapter {
-    List<Vote> getDoctorVoteAdapter(UUID doctorId);
+    List<Vote> getDoctorVoteAdapter(UUID doctorId, int pageNo, int pageSize);
     Optional<Vote> getByIdAdapter(UUID voteId);
     Vote addVoteAdapter(UUID patientId, UUID doctorId, Vote vote) throws BadRequestException;
     void updateVoteAdapter(UUID userId, Vote vote) throws BadRequestException;

@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IPostAdapter {
-    List<Post> getAllAdapter();
-    List<Post> getPostOfDoctorAdapter(UUID doctorId);
-    List<Post> getPostByCategoryAdapter(UUID categoryId);
+    List<Post> getAllAdapter(int pageNo, int pageSize);
+    List<Post> getPostOfDoctorAdapter(UUID doctorId, int pageNo, int pageSize);
+    List<Post> getPostByCategoryAdapter(UUID categoryId, int pageNo, int pageSize);
     Optional<Post> getPostByIdAdapter(UUID postId) throws NotFoundException;
     Post createPostAdapter(UUID doctorId, UUID CategoryID, Post post) throws BadRequestException;
     void updatePostAdapter(UUID userId, Post post) throws NotFoundException, BadRequestException;

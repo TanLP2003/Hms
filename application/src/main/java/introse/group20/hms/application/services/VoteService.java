@@ -19,8 +19,8 @@ public class VoteService implements IVoteService {
     }
 
     @Override
-    public List<Vote> getDoctorVote(UUID doctorId) {
-        return iVoteAdapter.getDoctorVoteAdapter(doctorId);
+    public List<Vote> getDoctorVote(UUID doctorId, int pageNo, int pageSize) {
+        return iVoteAdapter.getDoctorVoteAdapter(doctorId, pageNo, pageSize);
     }
 
     @Override

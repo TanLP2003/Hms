@@ -18,6 +18,8 @@ import jakarta.transaction.Transactional;
 import org.hibernate.annotations.DynamicUpdate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -38,24 +40,26 @@ public class PostAdapter implements IPostAdapter {
     @Autowired
     private EntityManager entityManager;
     @Override
-    public List<Post> getAllAdapter() {
-        List<PostModel> postModels = postRepository.findAll();
-        return postModels.stream()
-                .map(postModel -> modelMapper.map(postModel,Post.class))
+    public List<Post> getAllAdapter(int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        return postRepository.findAll(pageRequest).stream()
+                .map(postModel -> modelMapper.map(postModel, Post.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Post> getPostOfDoctorAdapter(UUID doctorId) {
-        List<PostModel> postModels = postRepository.findByDoctorId(doctorId);
+    public List<Post> getPostOfDoctorAdapter(UUID doctorId, int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        List<PostModel> postModels = postRepository.findByDoctorId(doctorId, pageRequest);
         return postModels.stream()
                 .map(postModel -> modelMapper.map(postModel, Post.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Post> getPostByCategoryAdapter(UUID categoryId) {
-        List<PostModel> postModels = postRepository.findByCategoryId(categoryId);
+    public List<Post> getPostByCategoryAdapter(UUID categoryId, int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        List<PostModel> postModels = postRepository.findByCategoryId(categoryId, pageRequest);
         return postModels.stream()
                 .map(postModel -> modelMapper.map(postModel, Post.class))
                 .collect(Collectors.toList());

@@ -7,7 +7,6 @@ import introse.group20.hms.application.services.uploads.IUploadService;
 import introse.group20.hms.core.entities.Doctor;
 import introse.group20.hms.core.entities.User;
 import introse.group20.hms.core.entities.enums.Gender;
-import introse.group20.hms.core.entities.enums.Role;
 import introse.group20.hms.core.exceptions.BadRequestException;
 import introse.group20.hms.core.exceptions.NotFoundException;
 import introse.group20.hms.webapi.DTOs.AuthDTO.UserDTO;
@@ -74,9 +73,12 @@ public class DoctorController {
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }
     @GetMapping("/doctors")
-    public ResponseEntity<List<DoctorResponse>> getDoctors()
+    public ResponseEntity<List<DoctorResponse>> getDoctors(
+            @RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    )
     {
-        List<Doctor> doctors = doctorService.getAll();
+        List<Doctor> doctors = doctorService.getAll(pageNo - 1, pageSize);
         List<DoctorResponse> doctorDTOS = doctors.stream()
             .map(doctor -> modelMapper.map(doctor, DoctorResponse.class))
             .collect(Collectors.toList());
@@ -90,9 +92,13 @@ public class DoctorController {
         return new ResponseEntity<DoctorResponse>(doctorResponse, HttpStatus.OK);
     }
     @GetMapping("/doctors/byDepartment")
-    public ResponseEntity<List<DoctorResponse>> getDoctorByDepartment(@RequestParam UUID departmentId)
+    public ResponseEntity<List<DoctorResponse>> getDoctorByDepartment(
+            @RequestParam UUID departmentId,
+            @RequestParam(defaultValue = "1")int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    )
     {
-        List<Doctor> doctors = doctorService.getByDepartment(departmentId);
+        List<Doctor> doctors = doctorService.getByDepartment(departmentId, pageNo - 1, pageSize);
         List<DoctorResponse> doctorResponses = doctors.stream()
                 .map(doctor -> modelMapper.map(doctor, DoctorResponse.class))
                 .collect(Collectors.toList());
@@ -106,9 +112,12 @@ public class DoctorController {
     }
     @RequestMapping(path = "/api/doctors/{doctorId}", method = PUT, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("ADMIN")
-    public ResponseEntity<HttpStatus> updateDoctor(@PathVariable UUID doctorId,@Valid @ModelAttribute DoctorRequest doctorRequest)
-    {
+    public ResponseEntity<HttpStatus> updateDoctor(@PathVariable UUID doctorId,@Valid @ModelAttribute DoctorRequest doctorRequest) throws IOException, BadRequestException {
         Doctor doctor = modelMapper.map(doctorRequest, Doctor.class);
+        if(!doctorRequest.getImage().isEmpty()){
+            String url = uploadService.upload(doctorRequest.getImage().getBytes(), doctorRequest.getImage().getOriginalFilename(), "avatars");
+            doctor.setImage(url);
+        }else doctor.setImage(null);
         doctor.setId(doctorId);
         doctorService.updateDoctor(doctor);
         return new ResponseEntity<HttpStatus>(HttpStatus.OK);

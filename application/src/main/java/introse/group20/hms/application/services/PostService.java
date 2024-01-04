@@ -17,18 +17,18 @@ public class PostService implements IPostService {
         this.postAdapter = postAdapter;
     }
     @Override
-    public List<Post> getAll() {
-        return postAdapter.getAllAdapter();
+    public List<Post> getAll(int pageNo, int pageSize) {
+        return postAdapter.getAllAdapter(pageNo, pageSize);
     }
 
     @Override
-    public List<Post> getPostOfDoctor(UUID doctorId) {
-        return postAdapter.getPostOfDoctorAdapter(doctorId);
+    public List<Post> getPostOfDoctor(UUID doctorId, int pageNo, int pageSize) {
+        return postAdapter.getPostOfDoctorAdapter(doctorId, pageNo,pageSize);
     }
 
     @Override
-    public List<Post> getPostByCategory(UUID categoryId) {
-        return postAdapter.getPostByCategoryAdapter(categoryId);
+    public List<Post> getPostByCategory(UUID categoryId, int pageNo, int pageSize) {
+        return postAdapter.getPostByCategoryAdapter(categoryId, pageNo, pageSize);
     }
 
     @Override

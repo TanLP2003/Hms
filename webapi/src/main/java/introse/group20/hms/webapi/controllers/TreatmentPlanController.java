@@ -35,8 +35,12 @@ public class TreatmentPlanController {
     @GetMapping("/patient")
     @Secured({"DOCTOR", "PATIENT"})
     //route: /api/treatment_plans/patient?patientId=<if of patient>
-    public ResponseEntity<List<TreatmentPlanResponse>> getForPatient(@RequestParam UUID patientId){
-        List<TreatmentPlan> treatmentPlans = treatmentPlanService.getForUser(patientId);
+    public ResponseEntity<List<TreatmentPlanResponse>> getForPatient(
+            @RequestParam UUID patientId,
+            @RequestParam(defaultValue = "1")int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    ){
+        List<TreatmentPlan> treatmentPlans = treatmentPlanService.getForUser(patientId, pageNo - 1, pageSize);
         List<TreatmentPlanResponse> treatmentPlanResponses = treatmentPlans.stream()
                 .map(this::mapToTreatmentPlanResponse)
                 .collect(Collectors.toList());

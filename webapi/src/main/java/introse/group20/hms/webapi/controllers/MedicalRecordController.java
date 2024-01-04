@@ -37,8 +37,12 @@ public class MedicalRecordController {
     @Transactional
     @Secured({"DOCTOR", "PATIENT"})
     //route: /api/medical_records?patientId=<id of patient>
-    public ResponseEntity<List<MedicalRecordResponse>> getByPatientId(@RequestParam UUID patientId){
-        List<MedicalRecord> medicalRecords = medicalRecordService.getByPatientId(patientId);
+    public ResponseEntity<List<MedicalRecordResponse>> getByPatientId(
+            @RequestParam UUID patientId,
+            @RequestParam(defaultValue = "1")int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    ){
+        List<MedicalRecord> medicalRecords = medicalRecordService.getByPatientId(patientId, pageNo - 1, pageSize);
         List<MedicalRecordResponse> medicalRecordResponses = medicalRecords.stream()
                 .map(medicalRecord -> modelMapper.map(medicalRecord, MedicalRecordResponse.class))
                 .collect(Collectors.toList());

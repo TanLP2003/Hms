@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IPostService {
-    List<Post> getAll();
-    List<Post> getPostOfDoctor(UUID doctorId);
-    List<Post> getPostByCategory(UUID categoryId);
+    List<Post> getAll(int pageNo, int pageSize);
+    List<Post> getPostOfDoctor(UUID doctorId, int pageNo, int pageSize);
+    List<Post> getPostByCategory(UUID categoryId, int pageNo, int pageSize);
     Post getPostById(UUID postId) throws NotFoundException;
     Post createPost(UUID doctorId, UUID categoryId, Post post) throws BadRequestException;
     void updatePost(UUID userId, Post post) throws NotFoundException, BadRequestException;
