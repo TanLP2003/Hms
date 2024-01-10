@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface ISurgeryService {
     List<Surgery> getAll();
+    List<Surgery> getInWeek();
     List<Surgery> getSurgeryForDoctor(UUID doctorId);
     Surgery addSurgery(UUID doctorId, UUID patientId, Surgery surgery) throws BadRequestException;
     void updateSurgery(Surgery surgery) throws BadRequestException;

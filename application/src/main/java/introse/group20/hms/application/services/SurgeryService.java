@@ -21,6 +21,10 @@ public class SurgeryService implements ISurgeryService {
     {
         return surgeryAdapter.getAllAdapter();
     }
+    @Override
+    public List<Surgery> getInWeek(){
+        return surgeryAdapter.getSurgeriesInWeek();
+    }
 
     @Override
     public List<Surgery> getSurgeryForDoctor(UUID doctorId) {
