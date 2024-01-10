@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import introse.group20.hms.webapi.utils.AuthExtensions;
 import java.util.UUID;
 
-@CrossOrigin(value = "*", maxAge = 3600)
+@CrossOrigin(value = "*")
 @RestController
 @RequestMapping("/auth")
 @Validated

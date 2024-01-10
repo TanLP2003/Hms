@@ -12,6 +12,7 @@ import introse.group20.hms.infracstructure.models.enums.StayType;
 import introse.group20.hms.infracstructure.repositories.IDoctorRepository;
 import introse.group20.hms.infracstructure.repositories.IMedicalRecordRepository;
 import introse.group20.hms.infracstructure.repositories.IPatientRepository;
+import introse.group20.hms.infracstructure.repositories.IUserRepository;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -39,6 +40,8 @@ public class PatientAdapter implements IPatientAdapter {
     private IMedicalRecordRepository medicalRecordRepository;
     @Autowired
     private IDoctorRepository doctorRepository;
+    @Autowired
+    private IUserRepository userRepository;
     @Override
     public List<Patient> getPatientByTypeAdapter(String type) {
         List<Patient> patients = medicalRecordRepository.findByStayType(StayType.valueOf(type))
@@ -76,7 +79,8 @@ public class PatientAdapter implements IPatientAdapter {
     public User addPatientAdapter(Patient patient) {
         PatientModel patientModel = modelMapper.map(patient, PatientModel.class);
         String password = PasswordGenerator.generatePassword(10);
-        UserModel userModel = new UserModel(patientModel.getPhoneNumber(), encoder.encode(password), Role.PATIENT);
+        String userName = String.format("%s-%s", patientModel.getName(), userRepository.count() + 1);
+        UserModel userModel = new UserModel(userName, encoder.encode(password), Role.PATIENT);
         UUID id = UUID.randomUUID();
         patientModel.setId(id);
         userModel.setId(id);

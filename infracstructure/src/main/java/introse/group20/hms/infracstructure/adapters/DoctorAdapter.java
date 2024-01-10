@@ -11,6 +11,7 @@ import introse.group20.hms.infracstructure.models.UserModel;
 import introse.group20.hms.infracstructure.models.enums.Role;
 import introse.group20.hms.infracstructure.repositories.IDepartmentRepository;
 import introse.group20.hms.infracstructure.repositories.IDoctorRepository;
+import introse.group20.hms.infracstructure.repositories.IUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,8 @@ public class DoctorAdapter implements IDoctorAdapter {
     private IDoctorRepository doctorRepository;
     @Autowired
     private DoctorMapperInfra doctorMapperInfra;
+    @Autowired
+    private IUserRepository userRepository;
     @Autowired
     private EntityManager entityManager;
     @Autowired
@@ -82,7 +85,8 @@ public class DoctorAdapter implements IDoctorAdapter {
             DoctorModel doctorModel = modelMapper.map(doctor, DoctorModel.class);
             doctorModel.setDepartment(department);
             String password = PasswordGenerator.generatePassword(10);
-            UserModel userModel = new UserModel(doctorModel.getPhoneNumber(), encoder.encode(password), Role.DOCTOR);
+            String userName = String.format("%s-%s", doctorModel.getName(), userRepository.count() + 1);
+            UserModel userModel = new UserModel(userName, encoder.encode(password), Role.DOCTOR);
             UUID id = UUID.randomUUID();
             doctorModel.setId(id);
             userModel.setId(id);
