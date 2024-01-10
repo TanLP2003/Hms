@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface ISurgeryAdapter {
     List<Surgery> getAllAdapter();
+    List<Surgery> getSurgeriesInWeek();
     List<Surgery> getSurgeryForDoctorAdapter(UUID doctorId);
     Surgery addSurgeryAdapter(UUID doctorId, UUID patientId, Surgery surgery) throws BadRequestException;
     void updateSurgeryAdapter(Surgery surgery) throws BadRequestException;

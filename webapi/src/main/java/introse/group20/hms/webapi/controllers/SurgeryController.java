@@ -36,6 +36,14 @@ public class SurgeryController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/week")
+    public List<SurgeryResponse> getInWeek(){
+        List<Surgery> surgeries = surgeryService.getInWeek();
+        return surgeries.stream()
+                .map(this::mapToSurgeryResponse)
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/doctor")
     @Secured({"DOCTOR", "ADMIN"})
     // route: /api/surgeries/doctor?doctorId=<id of doctor>
