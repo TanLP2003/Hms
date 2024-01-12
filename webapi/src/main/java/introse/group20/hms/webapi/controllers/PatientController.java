@@ -44,7 +44,7 @@ public class PatientController {
     @RequestMapping(method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("DOCTOR")
     @Transactional
-    public ResponseEntity<UserDTO> createPatient(@Valid @ModelAttribute PatientRequest patientRequest) throws IOException {
+    public ResponseEntity<UserDTO> createPatient(@Valid @ModelAttribute PatientRequest patientRequest) throws IOException, BadRequestException {
         Patient patient = new Patient();
         modelMapper.map(patientRequest, patient);
         patient.setGender(Gender.valueOf(patientRequest.getGender()));
