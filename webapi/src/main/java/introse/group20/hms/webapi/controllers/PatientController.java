@@ -1,6 +1,7 @@
 package introse.group20.hms.webapi.controllers;
 
 import introse.group20.hms.application.services.interfaces.IPatientService;
+import introse.group20.hms.application.services.interfaces.ISendSmsService;
 import introse.group20.hms.core.entities.Patient;
 import introse.group20.hms.core.entities.User;
 import introse.group20.hms.core.entities.enums.Gender;
@@ -20,6 +21,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,17 +38,21 @@ public class PatientController {
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
+    private ISendSmsService smsService;
+    @Autowired
     SimpMessagingTemplate simpMessagingTemplate;
     @RequestMapping(method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("DOCTOR")
     @Transactional
-    public ResponseEntity<UserDTO> createPatient(@Valid @ModelAttribute PatientRequest patientRequest)  {
+    public ResponseEntity<UserDTO> createPatient(@Valid @ModelAttribute PatientRequest patientRequest) throws IOException {
         Patient patient = new Patient();
         modelMapper.map(patientRequest, patient);
         patient.setGender(Gender.valueOf(patientRequest.getGender()));
         User user = patientService.addPatient(patient);
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         simpMessagingTemplate.convertAndSend("/topic/doctor", userDTO);
+        String message = String.format("Tài khoản: %s\nMật khẩu: %s", userDTO.getUsername(), userDTO.getPassword());
+        smsService.sendSms(patientRequest.getPhoneNumber(), message);
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }
 
