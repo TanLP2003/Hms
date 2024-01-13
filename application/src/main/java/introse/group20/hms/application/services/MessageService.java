@@ -4,7 +4,9 @@ import introse.group20.hms.application.adapters.IChatBoxAdapter;
 import introse.group20.hms.application.adapters.IMessageAdapter;
 import introse.group20.hms.application.services.interfaces.IChatBoxService;
 import introse.group20.hms.application.services.interfaces.IMessageService;
+import introse.group20.hms.core.entities.Doctor;
 import introse.group20.hms.core.entities.Message;
+import introse.group20.hms.core.entities.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -39,5 +41,15 @@ public class MessageService implements IMessageService {
     @Override
     public List<Message> getAllMessageOfUser(UUID userId) {
         return messageAdapter.getAllMessagesOfUserAdapter(userId);
+    }
+
+    @Override
+    public List<Doctor> getContactedDoctor(UUID patientId) {
+        return messageAdapter.getContactedDoctorAdapter(patientId);
+    }
+
+    @Override
+    public List<Patient> getContactedPatient(UUID doctorId) {
+        return messageAdapter.getContactedPatientAdapter(doctorId);
     }
 }
