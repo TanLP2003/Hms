@@ -1,6 +1,8 @@
 package introse.group20.hms.application.adapters;
 
+import introse.group20.hms.core.entities.Doctor;
 import introse.group20.hms.core.entities.Message;
+import introse.group20.hms.core.entities.Patient;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,4 +15,6 @@ public interface IMessageAdapter {
     Message saveMessage(Message message);
     List<Message> getConversationAdapter(UUID conversationId);
     List<Message> getAllMessagesOfUserAdapter(UUID userId);
+    List<Doctor> getContactedDoctorAdapter(UUID patientId);
+    List<Patient> getContactedPatientAdapter(UUID doctorId);
 }
