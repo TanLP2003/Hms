@@ -79,8 +79,7 @@ public class PatientAdapter implements IPatientAdapter {
     public User addPatientAdapter(Patient patient) {
         PatientModel patientModel = modelMapper.map(patient, PatientModel.class);
         String password = PasswordGenerator.generatePassword(10);
-        String userName = String.format("%s-%s", patientModel.getName(), userRepository.count() + 1);
-        UserModel userModel = new UserModel(userName, encoder.encode(password), Role.PATIENT);
+        UserModel userModel = new UserModel(patientModel.getName(), encoder.encode(password), Role.PATIENT);
         UUID id = UUID.randomUUID();
         patientModel.setId(id);
         userModel.setId(id);
@@ -88,8 +87,13 @@ public class PatientAdapter implements IPatientAdapter {
         userModel.setPatient(patientModel);
         entityManager.persist(userModel);
         entityManager.persist(patientModel);
+        entityManager.flush();
+        UserModel savedUserModel = userRepository.findById(id).get();
+        String userName = String.format("%s-<%s>", patientModel.getName(), savedUserModel.getStt());
+        savedUserModel.setUsername(userName);
+        entityManager.persist(savedUserModel);
         User user = new User();
-        modelMapper.map(userModel, user);
+        modelMapper.map(savedUserModel, user);
         user.setPassword(password);
         return user;
     }

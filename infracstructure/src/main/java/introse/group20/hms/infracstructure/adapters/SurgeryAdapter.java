@@ -18,10 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.WeekFields;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 @Component
 public class SurgeryAdapter implements ISurgeryAdapter {
@@ -54,6 +51,7 @@ public class SurgeryAdapter implements ISurgeryAdapter {
                     int surgeryYear = surgeryDateTime.getYear();
                     return currentWeek == surgeryWeek && currentYear == surgeryYear;
                 })
+                .sorted(Comparator.comparing(SurgeryModel::getTime))
                 .map(surgeryModel -> modelMapper.map(surgeryModel, Surgery.class))
                 .collect(Collectors.toList());
     }

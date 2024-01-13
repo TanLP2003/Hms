@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.print.Doc;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -85,16 +86,21 @@ public class DoctorAdapter implements IDoctorAdapter {
             DoctorModel doctorModel = modelMapper.map(doctor, DoctorModel.class);
             doctorModel.setDepartment(department);
             String password = PasswordGenerator.generatePassword(10);
-            String userName = String.format("%s-%s", doctorModel.getName(), userRepository.count() + 1);
-            UserModel userModel = new UserModel(userName, encoder.encode(password), Role.DOCTOR);
+            UserModel userModel = new UserModel(doctorModel.getName(), encoder.encode(password), Role.DOCTOR);
             UUID id = UUID.randomUUID();
             doctorModel.setId(id);
             userModel.setId(id);
             doctorModel.setUser(userModel);
             userModel.setDoctor(doctorModel);
             entityManager.persist(userModel);
+            entityManager.flush();
+            UserModel savedUserModel = userRepository.findById(id).get();
+            String userName = String.format("%s-<%s>", doctorModel.getName(), savedUserModel.getStt());
+            savedUserModel.setUsername(userName);
+//            doctorRepository.save(doctorModel);
+            entityManager.persist(savedUserModel);
             User user = new User();
-            modelMapper.map(userModel, user);
+            modelMapper.map(savedUserModel, user);
             user.setPassword(password);
             return user;
         }
