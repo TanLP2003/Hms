@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class PrescriptionAdapter implements IPrescriptionAdapter {
 
     @Override
     public List<Prescription> getByPatientAdapter(UUID patientId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
         List<PrescriptionModel> prescriptionModels = prescriptionRepository.findByPatientId(patientId, pageRequest);
         return prescriptionModels.stream()
                 .map(prescriptionModel -> modelMapper.map(prescriptionModel, Prescription.class))

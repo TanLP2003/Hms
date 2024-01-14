@@ -37,6 +37,7 @@ public class MedicalRecordModel {
     private StayType stayType;
     @Column(length = 1000)
     private String note;
+    private Date createdDay;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id")
     private PatientModel patient;
