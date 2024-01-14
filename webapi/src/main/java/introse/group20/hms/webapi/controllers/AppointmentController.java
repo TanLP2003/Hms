@@ -34,10 +34,10 @@ public class AppointmentController {
     @Secured("DOCTOR")
     //route" /api/appointments/doctor
     public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfDoctor(
-            @RequestParam UUID doctorId,
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize
     ){
+        UUID doctorId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByDoctor(doctorId, pageNo - 1, pageSize).stream()
                 .map(this::mapToApmResponse)
                 .collect(Collectors.toList());
@@ -48,10 +48,10 @@ public class AppointmentController {
     @Secured("PATIENT")
         //route" /api/appointments/patient
     public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfPatient(
-            @RequestParam UUID patientId,
             @RequestParam(defaultValue = "1")int pageNo,
             @RequestParam(defaultValue = "10") int pageSize
     ){
+        UUID patientId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByPatient(patientId, pageNo - 1, pageSize).stream()
                 .map(this::mapToApmResponse)
                 .collect(Collectors.toList());

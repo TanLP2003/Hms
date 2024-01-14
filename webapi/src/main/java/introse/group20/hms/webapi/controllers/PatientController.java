@@ -41,7 +41,8 @@ public class PatientController {
     private ISendSmsService smsService;
     @Autowired
     SimpMessagingTemplate simpMessagingTemplate;
-    @RequestMapping(method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+
+    @PostMapping
     @Secured("DOCTOR")
     @Transactional
     public ResponseEntity<UserDTO> createPatient(@Valid @ModelAttribute PatientRequest patientRequest) throws IOException, BadRequestException {
@@ -56,6 +57,15 @@ public class PatientController {
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }
 
+    @GetMapping
+    @Secured("DOCTOR")
+    public ResponseEntity<List<PatientResponse>> getAllPatient(){
+        List<PatientResponse> patientResponses = patientService.getAllPatient().stream()
+                .map(patient -> modelMapper.map(patient, PatientResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(patientResponses);
+    }
+
     @GetMapping("/{patientId}")
     @Secured({"DOCTOR", "PATIENT"})
     public ResponseEntity<PatientResponse> getPatientById(@PathVariable UUID patientId) throws NotFoundException {
@@ -63,7 +73,7 @@ public class PatientController {
         return ResponseEntity.ok(modelMapper.map(patient, PatientResponse.class));
     }
 
-    @GetMapping
+    @GetMapping("/byType")
     @Secured("DOCTOR")
     public ResponseEntity<List<PatientResponse>> getPatientByType(@RequestParam String stayType){
         List<PatientResponse> list =  patientService.getPatientByType(stayType).stream()

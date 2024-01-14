@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IPatientService {
+    List<Patient> getAllPatient();
     List<Patient> getPatientByType(String type);
     Patient getPatientById(UUID id) throws NotFoundException;
     List<Patient> getPatientOfDoctor(UUID doctorId) throws NotFoundException;

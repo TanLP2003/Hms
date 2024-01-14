@@ -18,6 +18,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +43,14 @@ public class PatientAdapter implements IPatientAdapter {
     private IDoctorRepository doctorRepository;
     @Autowired
     private IUserRepository userRepository;
+
+    @Override
+    public List<Patient> getAllPatientAdapter() {
+        return patientRepository.findAll().stream()
+                .map(patientModel -> modelMapper.map(patientModel, Patient.class))
+                .collect(Collectors.toList());
+    }
+
     @Override
     public List<Patient> getPatientByTypeAdapter(String type) {
         List<Patient> patients = medicalRecordRepository.findByStayType(StayType.valueOf(type))
@@ -89,7 +98,7 @@ public class PatientAdapter implements IPatientAdapter {
         entityManager.persist(patientModel);
         entityManager.flush();
         UserModel savedUserModel = userRepository.findById(id).get();
-        String userName = String.format("%s-<%s>", patientModel.getName(), savedUserModel.getStt());
+        String userName = String.format("BN-%s-%s", patientModel.getName(), savedUserModel.getStt());
         savedUserModel.setUsername(userName);
         entityManager.persist(savedUserModel);
         User user = new User();

@@ -16,26 +16,32 @@ public class CategoriesSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         List<CategoryModel> categoryModels = new ArrayList<>();
-        categoryModels.add(new CategoryModel("#HealthcareTips"));
-        categoryModels.add(new CategoryModel("#MedicalAdvice"));
-        categoryModels.add(new CategoryModel("#HealthNews"));
-        categoryModels.add(new CategoryModel("#HealthyLiving"));
-        categoryModels.add(new CategoryModel("#MedicalResearch"));
-        categoryModels.add(new CategoryModel("#WellnessTips"));
-        categoryModels.add(new CategoryModel("#MedicineUpdates"));
-        categoryModels.add(new CategoryModel("#DiseasePrevention"));
-        categoryModels.add(new CategoryModel("#FitnessMotivation"));
-        categoryModels.add(new CategoryModel("#MentalHealthAwareness"));
-        categoryModels.add(new CategoryModel("#NutritionFacts"));
-        categoryModels.add(new CategoryModel("#HealthyHabits"));
-        categoryModels.add(new CategoryModel("#MedicalBreakthroughs"));
-        categoryModels.add(new CategoryModel("#HealthEducation"));
-        categoryModels.add(new CategoryModel("#PatientCare"));
-        categoryModels.add(new CategoryModel("#HealthTech"));
-        categoryModels.add(new CategoryModel("#MedicalScience"));
-        categoryModels.add(new CategoryModel("#HolisticHealth"));
-        categoryModels.add(new CategoryModel("#MedicalInnovation"));
-        categoryModels.add(new CategoryModel("#SelfCareJourney"));
+        categoryModels.add(new CategoryModel("Sức khỏe mắt"));
+        categoryModels.add(new CategoryModel("Tiểu đường"));
+        categoryModels.add(new CategoryModel("Bệnh tim mạch"));
+        categoryModels.add(new CategoryModel("Bệnh hô hấp"));
+        categoryModels.add(new CategoryModel("Bệnh thận và Đường tiết niệu"));
+        categoryModels.add(new CategoryModel("Bệnh cơ xương khớp"));
+        categoryModels.add(new CategoryModel("Bệnh tai mũi họng"));
+        categoryModels.add(new CategoryModel("Chăm sóc giấc ngủ"));
+        categoryModels.add(new CategoryModel("Dị ứng"));
+        categoryModels.add(new CategoryModel("Sức khỏe răng miệng"));
+        categoryModels.add(new CategoryModel("Da liễu"));
+        categoryModels.add(new CategoryModel("Sức khỏe tình dục"));
+        categoryModels.add(new CategoryModel("Bệnh về máu"));
+        categoryModels.add(new CategoryModel("Bệnh tiêu hóa"));
+        categoryModels.add(new CategoryModel("Bệnh truyền nhiễm"));
+        categoryModels.add(new CategoryModel("Bệnh về não & hệ thần kinh"));
+        categoryModels.add(new CategoryModel("Ung thư - Ung bướu"));
+        categoryModels.add(new CategoryModel("Ăn uống lành mạnh"));
+        categoryModels.add(new CategoryModel("Thói quen lành mạnh"));
+        categoryModels.add(new CategoryModel("Lão hóa lành mạnh"));
+        categoryModels.add(new CategoryModel("Thể dục thể thao"));
+        categoryModels.add(new CategoryModel("Sức khỏe phụ nữ"));
+        categoryModels.add(new CategoryModel("Sức khỏe nam giới"));
+        categoryModels.add(new CategoryModel("Thuốc và thực phẩm chức năng"));
+        categoryModels.add(new CategoryModel("Tâm lý - Tâm thần"));
+        categoryModels.add(new CategoryModel("Dược liệu"));
         categoryRepository.saveAll(categoryModels);
     }
 }
