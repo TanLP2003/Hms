@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class MessageDisplay {
     private UUID id;
-//    private UUID conversationId;
     private UUID senderId;
     private UUID receiverId;
     private String content;

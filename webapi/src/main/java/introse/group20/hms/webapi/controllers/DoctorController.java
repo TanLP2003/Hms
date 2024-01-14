@@ -68,9 +68,9 @@ public class DoctorController {
         doctor.setGender(Gender.valueOf(doctorRequest.getGender()));
         User user = doctorService.addDoctor(doctorRequest.getDepartmentId(), doctor);
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-        simpMessagingTemplate.convertAndSend("/topic/patient", userDTO);
+//        simpMessagingTemplate.convertAndSend("/topic/patient", userDTO);
         String message = String.format("Tài khoản: %s\nMật khẩu: %s", userDTO.getUsername(), userDTO.getPassword());
-        smsService.sendSms(doctorRequest.getPhoneNumber(), message);
+//        smsService.sendSms(doctorRequest.getPhoneNumber(), message);
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }
     @GetMapping("/doctors")

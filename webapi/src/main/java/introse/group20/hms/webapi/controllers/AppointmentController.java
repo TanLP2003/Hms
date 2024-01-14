@@ -79,6 +79,26 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping("/accept/{appointmentId}")
+    @Secured("DOCTOR")
+    public ResponseEntity<HttpStatus> acceptAppointment(@PathVariable UUID appointmentId) throws NotFoundException, BadRequestException {
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        Appointment appointment = appointmentService.getById(appointmentId);
+        appointment.setStatus(AppointmentStatus.ACCEPT);
+        appointmentService.updateAppointment(userId, appointment);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/reject/{appointmentId}")
+    @Secured("DOCTOR")
+    public ResponseEntity<HttpStatus> rejectAppointment(@PathVariable UUID appointmentId) throws NotFoundException, BadRequestException {
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        Appointment appointment = appointmentService.getById(appointmentId);
+        appointment.setStatus(AppointmentStatus.REJECT);
+        appointmentService.updateAppointment(userId, appointment);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @DeleteMapping("/{appointmentId}")
     @Secured({"PATIENT"})
     public ResponseEntity<HttpStatus> deleteAppointment(@PathVariable UUID appointmentId) throws BadRequestException {
