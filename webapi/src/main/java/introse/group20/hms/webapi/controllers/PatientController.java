@@ -75,7 +75,7 @@ public class PatientController {
         return ResponseEntity.ok(modelMapper.map(patient, PatientResponse.class));
     }
 
-    @GetMapping
+    @GetMapping("/byType")
     @Secured("DOCTOR")
     public ResponseEntity<List<PatientResponse>> getPatientByType(@RequestParam String stayType){
         List<PatientResponse> list =  patientService.getPatientByType(stayType).stream()
