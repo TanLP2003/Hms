@@ -11,6 +11,7 @@ import introse.group20.hms.infracstructure.models.UserModel;
 import introse.group20.hms.infracstructure.models.enums.Role;
 import introse.group20.hms.infracstructure.repositories.IDepartmentRepository;
 import introse.group20.hms.infracstructure.repositories.IDoctorRepository;
+import introse.group20.hms.infracstructure.repositories.IRefreshTokenRepository;
 import introse.group20.hms.infracstructure.repositories.IUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -32,6 +33,8 @@ import java.util.stream.Collectors;
 public class DoctorAdapter implements IDoctorAdapter {
     @Autowired
     private IDoctorRepository doctorRepository;
+    @Autowired
+    private IRefreshTokenRepository refreshTokenRepository;
     @Autowired
     private DoctorMapperInfra doctorMapperInfra;
     @Autowired
@@ -122,6 +125,7 @@ public class DoctorAdapter implements IDoctorAdapter {
     public void deleteDoctorAdapter(UUID doctorId) throws BadRequestException {
         DoctorModel doctorModel = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new BadRequestException(String.format("Doctor with id: %s not exist", doctorId)));
+        refreshTokenRepository.deleteByUserId(doctorModel.getId());
         doctorRepository.delete(doctorModel);
     }
     @Override

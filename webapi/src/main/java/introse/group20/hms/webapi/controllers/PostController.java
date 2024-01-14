@@ -57,7 +57,7 @@ public class PostController {
             @RequestParam(defaultValue = "1")int pageNo,
             @RequestParam(defaultValue = "10")int pageSize
     ){
-        List<Post> posts = postService.getPostOfDoctor(doctorId, pageNo, pageSize);
+        List<Post> posts = postService.getPostOfDoctor(doctorId, pageNo - 1, pageSize);
         List<PostResponse> postDTOS = posts.stream()
                 .map(post -> modelMapper.map(post,PostResponse.class))
                 .collect(Collectors.toList());

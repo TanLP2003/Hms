@@ -80,10 +80,11 @@ public class SurgeryAdapter implements ISurgeryAdapter {
     public void updateSurgeryAdapter(Surgery surgery) throws BadRequestException {
         SurgeryModel surgeryModel = surgeryRepository.findById(surgery.getId())
                 .orElseThrow(() -> new BadRequestException(String.format("Surgery with id: %s not exist", surgery.getId())));
-        surgeryModel.setTime(surgery.getTime());
-        surgeryModel.setContent(surgery.getContent());
-        surgeryModel.setExpectedTime(surgery.getExpectedTime());
-        surgeryRepository.save(surgeryModel);
+//        surgeryModel.setTime(surgery.getTime());
+//        surgeryModel.setContent(surgery.getContent());
+//        surgeryModel.setExpectedTime(surgery.getExpectedTime());
+        SurgeryModel newSurgeryModel = modelMapper.map(surgery, SurgeryModel.class);
+        surgeryRepository.save(newSurgeryModel);
     }
 
     @Override
