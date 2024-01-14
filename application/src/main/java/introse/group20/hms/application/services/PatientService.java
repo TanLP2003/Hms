@@ -22,8 +22,8 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public List<Patient> getAllPatient(int pageNo, int pageSize) {
-        return patientAdapter.getAllPatientAdapter(pageNo, pageSize);
+    public List<Patient> getAllPatient() {
+        return patientAdapter.getAllPatientAdapter();
     }
 
     @Override

@@ -45,9 +45,8 @@ public class PatientAdapter implements IPatientAdapter {
     private IUserRepository userRepository;
 
     @Override
-    public List<Patient> getAllPatientAdapter(int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-        return patientRepository.findAll(pageRequest).stream()
+    public List<Patient> getAllPatientAdapter() {
+        return patientRepository.findAll().stream()
                 .map(patientModel -> modelMapper.map(patientModel, Patient.class))
                 .collect(Collectors.toList());
     }

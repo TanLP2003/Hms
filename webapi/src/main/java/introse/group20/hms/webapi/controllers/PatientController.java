@@ -58,11 +58,9 @@ public class PatientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PatientResponse>> getAllPatient(
-            @RequestParam(defaultValue = "1") int pageNo,
-            @RequestParam(defaultValue = "10")int pageSize
-    ){
-        List<PatientResponse> patientResponses = patientService.getAllPatient(pageNo - 1, pageSize).stream()
+    @Secured("DOCTOR")
+    public ResponseEntity<List<PatientResponse>> getAllPatient(){
+        List<PatientResponse> patientResponses = patientService.getAllPatient().stream()
                 .map(patient -> modelMapper.map(patient, PatientResponse.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(patientResponses);
