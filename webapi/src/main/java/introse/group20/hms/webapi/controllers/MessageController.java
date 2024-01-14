@@ -80,11 +80,11 @@ public class MessageController {
         return ResponseEntity.ok(patientResponses);
     }
     // for testing
-//    @PostMapping("/message/sendMessage")
-//    public ResponseEntity<MessageDisplay> createMessage(@RequestBody MessageRequest messageRequest){
-//        Message message = modelMapper.map(messageRequest, Message.class);
-//        Message savedMessage = messageService.saveMessage(message);
-//        return ResponseEntity.ok(modelMapper.map(savedMessage, MessageDisplay.class));
-//    }
+    @PostMapping("/message/sendMessage")
+    public ResponseEntity<MessageDisplay> createMessage(@RequestBody MessageRequest messageRequest){
+        Message message = modelMapper.map(messageRequest, Message.class);
+        Message savedMessage = messageService.saveMessage(message);
+        return ResponseEntity.ok(modelMapper.map(savedMessage, MessageDisplay.class));
+    }
 
 }

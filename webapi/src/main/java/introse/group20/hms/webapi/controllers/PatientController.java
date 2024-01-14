@@ -50,9 +50,9 @@ public class PatientController {
         patient.setGender(Gender.valueOf(patientRequest.getGender()));
         User user = patientService.addPatient(patient);
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-        simpMessagingTemplate.convertAndSend("/topic/doctor", userDTO);
+//        simpMessagingTemplate.convertAndSend("/topic/doctor", userDTO);
         String message = String.format("Tài khoản: %s\nMật khẩu: %s", userDTO.getUsername(), userDTO.getPassword());
-        smsService.sendSms(patientRequest.getPhoneNumber(), message);
+//        smsService.sendSms(patientRequest.getPhoneNumber(), message);
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }
 
