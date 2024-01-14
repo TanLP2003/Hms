@@ -123,4 +123,6 @@ public class DoctorController {
         doctorService.updateDoctor(doctor);
         return new ResponseEntity<HttpStatus>(HttpStatus.OK);
     }
+
+//    public ResponseEntity<HttpStatus> updateDoctorWithoutImg(@PathVariable UUID doctorId, @Valid @RequestBody )
 }

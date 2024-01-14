@@ -45,7 +45,7 @@ public class PatientController {
     @PostMapping
     @Secured("DOCTOR")
     @Transactional
-    public ResponseEntity<UserDTO> createPatient(@Valid @ModelAttribute PatientRequest patientRequest) throws IOException, BadRequestException {
+    public ResponseEntity<UserDTO> createPatient(@Valid @RequestBody PatientRequest patientRequest) throws IOException, BadRequestException {
         Patient patient = new Patient();
         modelMapper.map(patientRequest, patient);
         patient.setGender(Gender.valueOf(patientRequest.getGender()));
@@ -58,7 +58,7 @@ public class PatientController {
     }
 
     @GetMapping
-    @Secured("DOCTOR")
+    @Secured({"DOCTOR", "ADMIN"})
     public ResponseEntity<List<PatientResponse>> getAllPatient(){
         List<PatientResponse> patientResponses = patientService.getAllPatient().stream()
                 .map(patient -> modelMapper.map(patient, PatientResponse.class))
