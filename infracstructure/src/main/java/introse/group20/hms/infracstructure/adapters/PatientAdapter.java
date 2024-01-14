@@ -18,6 +18,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +43,15 @@ public class PatientAdapter implements IPatientAdapter {
     private IDoctorRepository doctorRepository;
     @Autowired
     private IUserRepository userRepository;
+
+    @Override
+    public List<Patient> getAllPatientAdapter(int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        return patientRepository.findAll(pageRequest).stream()
+                .map(patientModel -> modelMapper.map(patientModel, Patient.class))
+                .collect(Collectors.toList());
+    }
+
     @Override
     public List<Patient> getPatientByTypeAdapter(String type) {
         List<Patient> patients = medicalRecordRepository.findByStayType(StayType.valueOf(type))

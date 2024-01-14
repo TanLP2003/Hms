@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IPatientAdapter {
+    List<Patient> getAllPatientAdapter(int pageNo, int pageSize);
     List<Patient> getPatientByTypeAdapter(String type);
     Optional<Patient> getPatientByIdAdapter(UUID id);
     List<Patient> getPatientOfDoctorAdapter(UUID doctorId) throws NotFoundException;

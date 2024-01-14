@@ -41,7 +41,8 @@ public class PatientController {
     private ISendSmsService smsService;
     @Autowired
     SimpMessagingTemplate simpMessagingTemplate;
-    @RequestMapping(method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+
+    @PostMapping
     @Secured("DOCTOR")
     @Transactional
     public ResponseEntity<UserDTO> createPatient(@Valid @ModelAttribute PatientRequest patientRequest) throws IOException, BadRequestException {
@@ -54,6 +55,17 @@ public class PatientController {
         String message = String.format("Tài khoản: %s\nMật khẩu: %s", userDTO.getUsername(), userDTO.getPassword());
 //        smsService.sendSms(patientRequest.getPhoneNumber(), message);
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PatientResponse>> getAllPatient(
+            @RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    ){
+        List<PatientResponse> patientResponses = patientService.getAllPatient(pageNo - 1, pageSize).stream()
+                .map(patient -> modelMapper.map(patient, PatientResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(patientResponses);
     }
 
     @GetMapping("/{patientId}")

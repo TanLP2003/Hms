@@ -22,6 +22,11 @@ public class PatientService implements IPatientService {
     }
 
     @Override
+    public List<Patient> getAllPatient(int pageNo, int pageSize) {
+        return patientAdapter.getAllPatientAdapter(pageNo, pageSize);
+    }
+
+    @Override
     public Patient getPatientById(UUID id) throws NotFoundException {
         return patientAdapter.getPatientByIdAdapter(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Patient with id: %s not exist", id)));
