@@ -36,7 +36,7 @@ public class SurgeryController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/week")
+    @GetMapping("/inWeek")
     public List<SurgeryResponse> getInWeek(){
         List<Surgery> surgeries = surgeryService.getInWeek();
         return surgeries.stream()

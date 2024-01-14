@@ -89,7 +89,7 @@ public class PatientAdapter implements IPatientAdapter {
         entityManager.persist(patientModel);
         entityManager.flush();
         UserModel savedUserModel = userRepository.findById(id).get();
-        String userName = String.format("%s-<%s>", patientModel.getName(), savedUserModel.getStt());
+        String userName = String.format("BN-%s-%s", patientModel.getName(), savedUserModel.getStt());
         savedUserModel.setUsername(userName);
         entityManager.persist(savedUserModel);
         User user = new User();

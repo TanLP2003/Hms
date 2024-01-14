@@ -95,7 +95,7 @@ public class DoctorAdapter implements IDoctorAdapter {
             entityManager.persist(userModel);
             entityManager.flush();
             UserModel savedUserModel = userRepository.findById(id).get();
-            String userName = String.format("%s-<%s>", doctorModel.getName(), savedUserModel.getStt());
+            String userName = String.format("BS-%s-%s", doctorModel.getName(), savedUserModel.getStt());
             savedUserModel.setUsername(userName);
 //            doctorRepository.save(doctorModel);
             entityManager.persist(savedUserModel);
