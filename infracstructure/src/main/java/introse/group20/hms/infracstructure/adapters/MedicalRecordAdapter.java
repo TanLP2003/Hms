@@ -13,8 +13,10 @@ import introse.group20.hms.infracstructure.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +43,7 @@ public class MedicalRecordAdapter implements IMedicalRecordAdapter {
 
     @Override
     public List<MedicalRecord> getByPatientIdAdapter(UUID patientId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
         List<MedicalRecordModel> medicalRecordModels = iMedicalRecordRepository.findByPatientId(patientId, pageRequest);
         return medicalRecordModels.stream()
                 .map(medicalRecordModel -> modelMapper.map(medicalRecordModel, MedicalRecord.class))
@@ -72,6 +74,7 @@ public class MedicalRecordAdapter implements IMedicalRecordAdapter {
         if (departmentModel.isEmpty()) {
             throw new BadRequestException("Bad Request! Department is not exist!");
         }
+        medicalRecordModel.setCreatedDay(new Date());
         medicalRecordModel.setPatient(patientModel.get());
         medicalRecordModel.setDoctor(doctorModel.get());
         medicalRecordModel.setDepartment(departmentModel.get());

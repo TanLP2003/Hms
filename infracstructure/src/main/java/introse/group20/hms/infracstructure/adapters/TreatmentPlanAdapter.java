@@ -16,8 +16,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,7 +39,7 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
     private ModelMapper modelMapper;
     @Override
     public List<TreatmentPlan> getForUserAdapter(UUID userId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
         List<TreatmentPlanModel> treatmentPlanModels = treatmentPlanRepository.findByPatientId(userId, pageRequest);
         return treatmentPlanModels.stream()
                 .map(treatmentPlanModel -> modelMapper.map(treatmentPlanModel, TreatmentPlan.class))
@@ -61,6 +63,7 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
         {
             throw new BadRequestException("Bad request!");
         }
+        treatmentPlanModel.setCreatedDay(new Date());
         treatmentPlanModel.setDoctor(doctorModel.get());
         treatmentPlanModel.setPatient(patientModel.get());
         treatmentPlanModel.setMedicalRecord(medicalRecordModel);

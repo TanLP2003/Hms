@@ -20,6 +20,7 @@ public class TreatmentPlanModel {
     private Date nextExpectedExaminationDay;
     @Column(length = 500)
     private String note;
+    private Date createdDay;
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private PatientModel patient;

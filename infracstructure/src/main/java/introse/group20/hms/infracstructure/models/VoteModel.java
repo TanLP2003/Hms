@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.EnableMBeanExport;
 
+import java.util.Date;
 import java.util.UUID;
 @Entity
 @Table(name = "votes")
@@ -20,6 +21,7 @@ public class VoteModel {
     private Rating rating;
     @Column(length = 500)
     private String content;
+    private Date createdDay;
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private PatientModel patient;

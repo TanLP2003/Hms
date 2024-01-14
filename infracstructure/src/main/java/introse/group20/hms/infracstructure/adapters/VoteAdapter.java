@@ -12,8 +12,10 @@ import introse.group20.hms.infracstructure.repositories.IVoteRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +38,7 @@ public class VoteAdapter implements IVoteAdapter {
 
     @Override
     public List<Vote> getDoctorVoteAdapter(UUID doctorId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
         List<VoteModel> voteModels = iVoteRepository.findByDoctorId(doctorId, pageRequest);
         return voteModels.stream()
                 .map(voteModel -> modelMapper.map(voteModel, Vote.class))
@@ -60,6 +62,7 @@ public class VoteAdapter implements IVoteAdapter {
             throw new BadRequestException("BAD REQUEST!");
         }
         VoteModel voteModel = modelMapper.map(vote, VoteModel.class);
+        voteModel.setCreatedDay(new Date());
         voteModel.setDoctor(doctorModel.get());
         voteModel.setPatient(patientModel.get());
         VoteModel savedVote = iVoteRepository.save(voteModel);

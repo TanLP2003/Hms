@@ -14,8 +14,10 @@ import introse.group20.hms.infracstructure.repositories.IPatientRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,7 +42,7 @@ public class AppointmentAdapter implements IAppointmentAdapter {
 
     @Override
     public List<Appointment> getAppointmentByDoctorAdapter(UUID doctorId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
         return appointmentRepository.findByDoctorId(doctorId, pageRequest).stream()
                 .map(appointmentModel -> modelMapper.map(appointmentModel, Appointment.class))
                 .collect(Collectors.toList());
@@ -48,7 +50,7 @@ public class AppointmentAdapter implements IAppointmentAdapter {
 
     @Override
     public List<Appointment> getAppointmentByPatientAdapter(UUID patientId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
         return appointmentRepository.findByPatientId(patientId, pageRequest).stream()
                 .map(appointmentModel -> modelMapper.map(appointmentModel, Appointment.class))
                 .collect(Collectors.toList());
@@ -61,6 +63,7 @@ public class AppointmentAdapter implements IAppointmentAdapter {
         PatientModel patientModel = patientRepository.findById(patientId)
                 .orElseThrow(() -> new BadRequestException(String.format("Patient with id: %s not exist", patientId)));
         AppointmentModel appointmentModel = modelMapper.map(apm, AppointmentModel.class);
+        appointmentModel.setCreatedDay(new Date());
         appointmentModel.setDoctor(doctorModel);
         appointmentModel.setPatient(patientModel);
         appointmentModel.setStatus(AppointmentStatus.PENDING);

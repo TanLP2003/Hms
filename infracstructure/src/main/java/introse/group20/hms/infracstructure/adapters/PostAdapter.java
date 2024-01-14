@@ -20,8 +20,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +43,7 @@ public class PostAdapter implements IPostAdapter {
     private EntityManager entityManager;
     @Override
     public List<Post> getAllAdapter(int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
         return postRepository.findAll(pageRequest).stream()
                 .map(postModel -> modelMapper.map(postModel, Post.class))
                 .collect(Collectors.toList());
@@ -49,7 +51,7 @@ public class PostAdapter implements IPostAdapter {
 
     @Override
     public List<Post> getPostOfDoctorAdapter(UUID doctorId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
         List<PostModel> postModels = postRepository.findByDoctorId(doctorId, pageRequest);
         return postModels.stream()
                 .map(postModel -> modelMapper.map(postModel, Post.class))
@@ -58,7 +60,7 @@ public class PostAdapter implements IPostAdapter {
 
     @Override
     public List<Post> getPostByCategoryAdapter(UUID categoryId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
         List<PostModel> postModels = postRepository.findByCategoryId(categoryId, pageRequest);
         return postModels.stream()
                 .map(postModel -> modelMapper.map(postModel, Post.class))
@@ -87,6 +89,7 @@ public class PostAdapter implements IPostAdapter {
             PostModel postModel = modelMapper.map(post,PostModel.class);
             postModel.setCategory(category);
             postModel.setDoctor(doctor);
+            postModel.setCreatedDay(new Date());
             category.getPosts().add(postModel);
             //save to db
             entityManager.merge(postModel);

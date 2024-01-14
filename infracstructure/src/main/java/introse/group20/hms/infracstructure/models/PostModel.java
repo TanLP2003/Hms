@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.util.Date;
 import java.util.UUID;
 @Entity
 @Table(name = "posts")
@@ -22,6 +23,7 @@ public class PostModel {
     private String cover;
     @Column(length = 500)
     private String coverContent;
+    private Date createdDay;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryModel category;
