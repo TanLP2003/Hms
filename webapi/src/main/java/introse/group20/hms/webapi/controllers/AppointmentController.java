@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/appointments")
+@CrossOrigin("*")
 @Validated
 public class AppointmentController {
     @Autowired
@@ -33,12 +34,9 @@ public class AppointmentController {
     @GetMapping(value = "/doctor", name = "getForDoctor")
     @Secured("DOCTOR")
     //route" /api/appointments/doctor
-    public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfDoctor(
-            @RequestParam(defaultValue = "1") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize
-    ){
+    public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfDoctor(){
         UUID doctorId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
-        List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByDoctor(doctorId, pageNo - 1, pageSize).stream()
+        List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByDoctor(doctorId).stream()
                 .map(this::mapToApmResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(appointmentResponses);
@@ -47,12 +45,9 @@ public class AppointmentController {
     @GetMapping(value = "/patient", name = "getForPatient")
     @Secured("PATIENT")
         //route" /api/appointments/patient
-    public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfPatient(
-            @RequestParam(defaultValue = "1")int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize
-    ){
+    public ResponseEntity<List<AppointmentResponse>> getAppointmentsOfPatient(){
         UUID patientId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
-        List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByPatient(patientId, pageNo - 1, pageSize).stream()
+        List<AppointmentResponse> appointmentResponses = appointmentService.getAppointmentByPatient(patientId).stream()
                 .map(this::mapToApmResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(appointmentResponses);

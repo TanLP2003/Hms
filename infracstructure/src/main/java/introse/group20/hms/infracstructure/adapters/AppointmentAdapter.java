@@ -41,17 +41,19 @@ public class AppointmentAdapter implements IAppointmentAdapter {
     }
 
     @Override
-    public List<Appointment> getAppointmentByDoctorAdapter(UUID doctorId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
-        return appointmentRepository.findByDoctorId(doctorId, pageRequest).stream()
+    public List<Appointment> getAppointmentByDoctorAdapter(UUID doctorId) {
+//        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
+        return appointmentRepository.findByDoctorId(doctorId).stream()
+                .filter(appointmentModel -> appointmentModel.getTime().compareTo(new Date()) > 0)
                 .map(appointmentModel -> modelMapper.map(appointmentModel, Appointment.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Appointment> getAppointmentByPatientAdapter(UUID patientId, int pageNo, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
-        return appointmentRepository.findByPatientId(patientId, pageRequest).stream()
+    public List<Appointment> getAppointmentByPatientAdapter(UUID patientId) {
+//        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("createdDay").descending());
+        return appointmentRepository.findByPatientId(patientId).stream()
+                .filter(appointmentModel -> appointmentModel.getTime().compareTo(new Date()) > 0)
                 .map(appointmentModel -> modelMapper.map(appointmentModel, Appointment.class))
                 .collect(Collectors.toList());
     }
@@ -92,7 +94,7 @@ public class AppointmentAdapter implements IAppointmentAdapter {
     public void deleteAppointmentAdapter(UUID userId, UUID id) throws BadRequestException {
         AppointmentModel appointmentModel = appointmentRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(String.format("Appointment with id: %s not exist", id)));
-        if(userId.compareTo(appointmentModel.getDoctor().getId()) != 0) {
+        if(userId.compareTo(appointmentModel.getPatient().getId()) != 0) {
             throw new BadRequestException("Bad Request! Action not allowed!");
         }
         appointmentRepository.delete(appointmentModel);

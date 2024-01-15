@@ -11,6 +11,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class VoteResponse {
     private UUID id;
+    private UUID doctorId;
+    private String doctorName;
     private UUID patientId;
     private String patientName;
     private int rating;

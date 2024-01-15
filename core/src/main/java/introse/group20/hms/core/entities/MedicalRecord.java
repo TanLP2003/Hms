@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class MedicalRecord {
     private UUID id;
-    private String BHYTCode;
+    private String bhytCode;
     private Date inDay;
     private Date outDay;
     private String inDayDiagnose;
@@ -40,11 +40,11 @@ public class MedicalRecord {
     }
 
     public String getBHYTCode() {
-        return BHYTCode;
+        return bhytCode;
     }
 
     public void setBHYTCode(String BHYTCode) {
-        this.BHYTCode = BHYTCode;
+        this.bhytCode = BHYTCode;
     }
 
     public Date getInDay() {

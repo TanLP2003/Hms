@@ -93,8 +93,8 @@ public class MedicalRecordAdapter implements IMedicalRecordAdapter {
         if(userId.compareTo(updatedMedicalRecordModel.getDoctor().getId()) != 0){
             throw new BadRequestException("Bad Request! Action now allowed!");
         }
-
-        updatedMedicalRecordModel.setBHYTCode(medicalRecord.getBHYTCode());
+        updatedMedicalRecordModel.setNote(medicalRecord.getNote());
+        updatedMedicalRecordModel.setBhytCode(medicalRecord.getBHYTCode());
         updatedMedicalRecordModel.setInDay(medicalRecord.getInDay());
         updatedMedicalRecordModel.setOutDay(medicalRecord.getOutDay());
         updatedMedicalRecordModel.setInDayDiagnose(medicalRecord.getInDayDiagnose());

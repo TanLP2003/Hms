@@ -22,13 +22,13 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public List<Appointment> getAppointmentByDoctor(UUID doctorId, int pageNo, int pageSize) {
-        return appointmentAdapter.getAppointmentByDoctorAdapter(doctorId, pageNo, pageSize);
+    public List<Appointment> getAppointmentByDoctor(UUID doctorId) {
+        return appointmentAdapter.getAppointmentByDoctorAdapter(doctorId);
     }
 
     @Override
-    public List<Appointment> getAppointmentByPatient(UUID patientId, int pageNo, int pageSize) {
-        return appointmentAdapter.getAppointmentByPatientAdapter(patientId, pageNo, pageSize);
+    public List<Appointment> getAppointmentByPatient(UUID patientId) {
+        return appointmentAdapter.getAppointmentByPatientAdapter(patientId);
     }
 
     @Override

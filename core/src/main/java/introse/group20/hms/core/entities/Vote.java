@@ -17,13 +17,21 @@ public class Vote {
     private Rating rating;
     private String content;
     private Patient patient;
-
+    private Doctor doctor;
     public UUID getId() {
         return id;
     }
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
     public Rating getRating() {

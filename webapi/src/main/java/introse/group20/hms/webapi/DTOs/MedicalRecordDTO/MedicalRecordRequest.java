@@ -16,10 +16,9 @@ public class MedicalRecordRequest {
     @NotNull
     private UUID departmentId;
     @NotBlank
-    private String BHYTCode;
+    private String bhytCode;
     @NotNull
     private Date inDay;
-    @NotNull
     private Date outDay;
     @NotBlank
     private String inDayDiagnose;

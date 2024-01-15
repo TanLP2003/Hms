@@ -20,9 +20,15 @@ public class DoctorService implements IDoctorService {
     {
         this.doctorAdapter = doctorAdapter;
     }
+
     @Override
-    public List<Doctor> getAll(int pageNo, int pageSize) {
-        return doctorAdapter.getAllDoctorsAdapter(pageNo, pageSize);
+    public List<Doctor> getAllDoctor() {
+        return doctorAdapter.getAllDoctorAdapter();
+    }
+
+    @Override
+    public List<Doctor> getPageDoctor(int pageNo, int pageSize) {
+        return doctorAdapter.getPageDoctorsAdapter(pageNo, pageSize);
     }
 
     @Override

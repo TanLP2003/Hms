@@ -78,7 +78,7 @@ public class VoteController {
     }
 
     private VoteResponse mapToDTO(Vote vote) {
-        return new VoteResponse(vote.getId(), vote.getPatient().getId(), vote.getPatient().getName(),
+        return new VoteResponse(vote.getId(), vote.getDoctor().getId(),vote.getDoctor().getName(), vote.getPatient().getId(), vote.getPatient().getName(),
                 vote.getRating() == null ? 0 : vote.getRating().getValue(), vote.getContent());
     }
 

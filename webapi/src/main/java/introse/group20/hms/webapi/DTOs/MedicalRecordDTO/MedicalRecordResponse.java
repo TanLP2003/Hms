@@ -15,7 +15,7 @@ public class MedicalRecordResponse {
     private String patientName;
     private UUID departmentId;
     private String departmentName;
-    private String BHYTCode;
+    private String bhytCode;
     private Date inDay;
     private Date outDay;
     private String inDayDiagnose;

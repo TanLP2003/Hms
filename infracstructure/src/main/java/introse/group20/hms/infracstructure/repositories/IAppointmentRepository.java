@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IAppointmentRepository extends JpaRepository<AppointmentModel, UUID> {
-    List<AppointmentModel> findByDoctorId(UUID doctorId, Pageable pageable);
-    List<AppointmentModel> findByPatientId(UUID patientId, Pageable pageable);
+    List<AppointmentModel> findByDoctorId(UUID doctorId);
+    List<AppointmentModel> findByPatientId(UUID patientId);
 }

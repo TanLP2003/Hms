@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public interface IAppointmentService {
     Appointment getById(UUID id) throws NotFoundException;
-    List<Appointment> getAppointmentByDoctor(UUID doctorId, int pageNo, int pageSize);
-    List<Appointment> getAppointmentByPatient(UUID patientId, int pageNo, int pageSize);
+    List<Appointment> getAppointmentByDoctor(UUID doctorId);
+    List<Appointment> getAppointmentByPatient(UUID patientId);
     Appointment addAppointment(UUID doctorId, UUID patientId, Appointment apm) throws BadRequestException;
     void updateAppointment(UUID userId, Appointment appointment) throws BadRequestException;
     void deleteAppointment(UUID userId, UUID id) throws BadRequestException;

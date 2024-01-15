@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public interface IAppointmentAdapter {
     Optional<Appointment> getAppointmentById(UUID id);
-    List<Appointment> getAppointmentByDoctorAdapter(UUID doctorId, int pageNo, int pageSize);
-    List<Appointment> getAppointmentByPatientAdapter(UUID patientId, int pageNo, int pageSize);
+    List<Appointment> getAppointmentByDoctorAdapter(UUID doctorId);
+    List<Appointment> getAppointmentByPatientAdapter(UUID patientId);
     Appointment addAppointmentAdapter(UUID doctorId, UUID patientId, Appointment apm) throws BadRequestException;
     void updateAppointmentAdapter(UUID userId, Appointment appointment) throws BadRequestException;
     void deleteAppointmentAdapter(UUID userId, UUID id) throws BadRequestException;

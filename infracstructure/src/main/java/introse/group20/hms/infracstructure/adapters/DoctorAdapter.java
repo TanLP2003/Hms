@@ -47,8 +47,16 @@ public class DoctorAdapter implements IDoctorAdapter {
     private IDepartmentRepository departmentRepository;
     @Autowired
     private PasswordEncoder encoder;
+
     @Override
-    public List<Doctor> getAllDoctorsAdapter(int pageNo, int pageSize) {
+    public List<Doctor> getAllDoctorAdapter() {
+        return doctorRepository.findAll().stream()
+                .map(doctorModel -> doctorMapperInfra.mapToDoctor(doctorModel))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Doctor> getPageDoctorsAdapter(int pageNo, int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
         Page<DoctorModel> list = doctorRepository.findAll(pageRequest);
         return list.stream()

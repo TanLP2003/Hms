@@ -1,6 +1,7 @@
 package introse.group20.hms.webapi.DTOs.PrescriptionDTO;
 
 import introse.group20.hms.webapi.DTOs.MedicineDTO.MedicineRequest;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -15,6 +16,6 @@ public class PrescriptionRequest {
     @NotNull
     private Date createdDay;
     private String note;
-    @NotNull
+    @NotEmpty
     private List<MedicineRequest> medicines;
 }

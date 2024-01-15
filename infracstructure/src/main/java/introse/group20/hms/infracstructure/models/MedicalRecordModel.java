@@ -16,7 +16,7 @@ public class MedicalRecordModel {
     @Id
     @GeneratedValue
     private UUID id;
-    private String BHYTCode;
+    private String bhytCode;
     private Date inDay;
     private Date outDay;
     @Column(length = 1000)

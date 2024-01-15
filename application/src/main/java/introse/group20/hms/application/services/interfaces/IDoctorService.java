@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IDoctorService {
-    List<Doctor> getAll(int pageNo, int pageSize);
+    List<Doctor> getAllDoctor();
+    List<Doctor> getPageDoctor(int pageNo, int pageSize);
     List<Doctor> getByDepartment(UUID departmentId, int pageNo, int pageSize);
     Doctor getById(UUID id) throws NotFoundException;
     User addDoctor(UUID departmentId, Doctor doctor) throws BadRequestException;

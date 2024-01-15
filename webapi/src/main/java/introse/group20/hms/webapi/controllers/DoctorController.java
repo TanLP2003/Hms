@@ -73,13 +73,21 @@ public class DoctorController {
 //        smsService.sendSms(doctorRequest.getPhoneNumber(), message);
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
     }
-    @GetMapping("/doctors")
+
+    @GetMapping("/doctors/all")
+    public ResponseEntity<List<DoctorResponse>> getAllDoctor(){
+        List<DoctorResponse> doctorResponses = doctorService.getAllDoctor().stream()
+                .map(doctor -> modelMapper.map(doctor, DoctorResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(doctorResponses);
+    }
+    @GetMapping("/doctors/page")
     public ResponseEntity<List<DoctorResponse>> getDoctors(
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10")int pageSize
     )
     {
-        List<Doctor> doctors = doctorService.getAll(pageNo - 1, pageSize);
+        List<Doctor> doctors = doctorService.getPageDoctor(pageNo - 1, pageSize);
         List<DoctorResponse> doctorDTOS = doctors.stream()
             .map(doctor -> modelMapper.map(doctor, DoctorResponse.class))
             .collect(Collectors.toList());
