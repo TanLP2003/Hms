@@ -67,12 +67,12 @@ public class PrescriptionController {
 
     @PutMapping("/{presId}")
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> updatePrescription(@PathVariable UUID presId, @Valid @RequestBody PrescriptionRequest request) throws BadRequestException {
+    public ResponseEntity<PrescriptionResponse> updatePrescription(@PathVariable UUID presId, @Valid @RequestBody PrescriptionRequest request) throws BadRequestException {
         Prescription updatedPrescription = modelMapper.map(request, Prescription.class);
         updatedPrescription.setId(presId);
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
-        prescriptionService.updatePrescription(userId, updatedPrescription);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        Prescription savedPres = prescriptionService.updatePrescription(userId, updatedPrescription);
+        return new ResponseEntity<>(mapToPrescriptionResponse(savedPres), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{presId}")

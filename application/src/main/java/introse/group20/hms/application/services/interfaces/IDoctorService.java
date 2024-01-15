@@ -14,7 +14,7 @@ public interface IDoctorService {
     List<Doctor> getByDepartment(UUID departmentId, int pageNo, int pageSize);
     Doctor getById(UUID id) throws NotFoundException;
     User addDoctor(UUID departmentId, Doctor doctor) throws BadRequestException;
-    void updateDoctor(Doctor doctor) throws BadRequestException;
+    Doctor updateDoctor(Doctor doctor) throws BadRequestException;
     void deleteDoctor(UUID doctorId) throws BadRequestException;
     void test();
 }

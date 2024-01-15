@@ -47,8 +47,8 @@ public class PostService implements IPostService {
 
 
     @Override
-    public void updatePost(UUID userId, Post post) throws NotFoundException, BadRequestException {
-        postAdapter.updatePostAdapter(userId, post);
+    public Post updatePost(UUID userId, Post post) throws NotFoundException, BadRequestException {
+        return postAdapter.updatePostAdapter(userId, post);
     }
 
     @Override

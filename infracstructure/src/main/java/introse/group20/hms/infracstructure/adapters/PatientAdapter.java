@@ -107,10 +107,11 @@ public class PatientAdapter implements IPatientAdapter {
         return user;
     }
     @Override
-    public void updatePatientAdapter(Patient patient) throws BadRequestException {
+    public Patient updatePatientAdapter(Patient patient) throws BadRequestException {
         patientRepository.findById(patient.getId())
                 .orElseThrow(() -> new BadRequestException("Bad Request! Patient not exist"));
         PatientModel patientModel = modelMapper.map(patient, PatientModel.class);
-        patientRepository.save(patientModel);
+        PatientModel savedPatient = patientRepository.save(patientModel);
+        return modelMapper.map(savedPatient, Patient.class);
     }
 }

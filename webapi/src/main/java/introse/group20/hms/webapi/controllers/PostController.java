@@ -104,7 +104,7 @@ public class PostController {
 
     @PutMapping(value = "/api/posts/{postId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> updatePost(@PathVariable UUID postId, @Valid @ModelAttribute PostRequest postRequest) throws IOException, NotFoundException, BadRequestException {
+    public ResponseEntity<PostResponse> updatePost(@PathVariable UUID postId, @Valid @ModelAttribute PostRequest postRequest) throws IOException, NotFoundException, BadRequestException {
         Post post = modelMapper.map(postRequest, Post.class);
         if (postRequest.getCover() != null && !postRequest.getCover().isEmpty()){
             post.setCover(uploadService.upload(postRequest.getCover().getBytes(), postRequest.getCover().getOriginalFilename(),"postCovers"));
@@ -112,8 +112,8 @@ public class PostController {
         else post.setCover(null);
         post.setId(postId);
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
-        postService.updatePost(userId, post);
-        return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+        Post updatedPost = postService.updatePost(userId, post);
+        return new ResponseEntity<>(modelMapper.map(updatedPost, PostResponse.class), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/api/posts/{postId}")

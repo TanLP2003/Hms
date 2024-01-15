@@ -11,6 +11,6 @@ public interface IPrescriptionAdapter {
     List<Prescription> getByPatientAdapter(UUID patientId, int pageNo, int pageSize);
     Optional<Prescription> getByIdAdapter(UUID presId);
     Prescription addPrescriptionAdapter(UUID doctorId, UUID patientId, Prescription prescription) throws BadRequestException;
-    void updatePrescriptionAdapter(UUID userId, Prescription prescription) throws BadRequestException;
+    Prescription updatePrescriptionAdapter(UUID userId, Prescription prescription) throws BadRequestException;
     void deletePrescriptionAdapter(UUID userId, UUID presId) throws BadRequestException;
 }

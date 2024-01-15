@@ -8,6 +8,7 @@ import introse.group20.hms.core.exceptions.NotFoundException;
 import introse.group20.hms.webapi.DTOs.TreatmentPlanDTO.TreatmentPlanRequest;
 import introse.group20.hms.webapi.DTOs.TreatmentPlanDTO.TreatmentPlanResponse;
 import introse.group20.hms.webapi.utils.AuthExtensions;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,12 +66,13 @@ public class TreatmentPlanController {
 
     @PutMapping("/{id}")
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> updateTreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
+    @Transactional
+    public ResponseEntity<TreatmentPlanResponse> updateTreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
         TreatmentPlan treatmentPlan = modelMapper.map(request, TreatmentPlan.class);
         treatmentPlan.setId(id);
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
-        treatmentPlanService.updateTreatmentPlan(userId, treatmentPlan);
-        return new ResponseEntity<>(HttpStatus.OK);
+        TreatmentPlan savedTP = treatmentPlanService.updateTreatmentPlan(userId, treatmentPlan);
+        return new ResponseEntity<>(mapToTreatmentPlanResponse(savedTP), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")

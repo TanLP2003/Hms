@@ -22,7 +22,6 @@ public class MedicalRecordRequest {
     private Date outDay;
     @NotBlank
     private String inDayDiagnose;
-    @NotBlank
     private String outDayDiagnose;
     @NotBlank
     private String medicalHistory;
@@ -30,7 +29,6 @@ public class MedicalRecordRequest {
     private String diseaseProgress;
     @NotBlank
     private String testResults;
-    @NotBlank
     private String hospitalDischargeStatus;
     @NotBlank
     @Pattern(regexp = "^(STAY|NOT_STAY|DAYTIME_STAY)$")

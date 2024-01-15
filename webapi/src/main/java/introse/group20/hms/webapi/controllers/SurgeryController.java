@@ -66,11 +66,11 @@ public class SurgeryController {
 
     @PutMapping("/{surgeryId}")
     @Secured("ADMIN")
-    public ResponseEntity<HttpStatus> updateSurgery(@PathVariable UUID surgeryId, @Valid @RequestBody SurgeryRequest surgeryRequest) throws BadRequestException {
+    public ResponseEntity<SurgeryResponse> updateSurgery(@PathVariable UUID surgeryId, @Valid @RequestBody SurgeryRequest surgeryRequest) throws BadRequestException {
         Surgery surgery =mapToSurgery(surgeryRequest);
         surgery.setId(surgeryId);
-        surgeryService.updateSurgery(surgery);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Surgery savedSurgery = surgeryService.updateSurgery(surgery);
+        return new ResponseEntity<>(modelMapper.map(savedSurgery, SurgeryResponse.class), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{surgeryId}")

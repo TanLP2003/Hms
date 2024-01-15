@@ -45,7 +45,7 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public void updatePatient(Patient patient) throws BadRequestException {
-        patientAdapter.updatePatientAdapter(patient);
+    public Patient updatePatient(Patient patient) throws BadRequestException {
+        return patientAdapter.updatePatientAdapter(patient);
     }
 }

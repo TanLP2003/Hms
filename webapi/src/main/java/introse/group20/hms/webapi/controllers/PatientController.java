@@ -93,10 +93,10 @@ public class PatientController {
 
     @PutMapping("/{patientId}")
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> updatePatient(@PathVariable UUID patientId, @Valid @RequestBody PatientRequest request) throws BadRequestException {
+    public ResponseEntity<PatientResponse> updatePatient(@PathVariable UUID patientId, @Valid @RequestBody PatientRequest request) throws BadRequestException {
         Patient patient = modelMapper.map(request, Patient.class);
         patient.setId(patientId);
-        patientService.updatePatient(patient);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Patient savePatient = patientService.updatePatient(patient);
+        return new ResponseEntity<>(modelMapper.map(savePatient, PatientResponse.class), HttpStatus.ACCEPTED);
     }
 }

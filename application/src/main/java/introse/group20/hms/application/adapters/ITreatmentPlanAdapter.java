@@ -11,6 +11,6 @@ public interface ITreatmentPlanAdapter {
     List<TreatmentPlan> getForUserAdapter(UUID userId, int pageNo, int pageSize);
     Optional<TreatmentPlan> getByIdAdapter(UUID id);
     TreatmentPlan createTreatmentPlanAdapter(UUID patientId, UUID doctorId, TreatmentPlan treatmentPlan) throws BadRequestException;
-    void updateTreatmentPlanAdapter(UUID userId, TreatmentPlan treatmentPlan) throws BadRequestException;
+    TreatmentPlan updateTreatmentPlanAdapter(UUID userId, TreatmentPlan treatmentPlan) throws BadRequestException;
     void deleteTreatmentPlanAdapter(UUID userId, UUID id) throws BadRequestException;
 }

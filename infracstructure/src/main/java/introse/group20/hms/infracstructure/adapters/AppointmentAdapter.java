@@ -1,5 +1,6 @@
 package introse.group20.hms.infracstructure.adapters;
 
+import com.twilio.rest.microvisor.v1.App;
 import introse.group20.hms.application.adapters.IAppointmentAdapter;
 import introse.group20.hms.application.services.interfaces.IAppointmentService;
 import introse.group20.hms.core.entities.Appointment;
@@ -76,7 +77,7 @@ public class AppointmentAdapter implements IAppointmentAdapter {
     }
 
     @Override
-    public void updateAppointmentAdapter(UUID userId, Appointment appointment) throws BadRequestException {
+    public Appointment updateAppointmentAdapter(UUID userId, Appointment appointment) throws BadRequestException {
         AppointmentModel appointmentModel = appointmentRepository.findById(appointment.getId())
                 .orElseThrow(() -> new BadRequestException(String.format("Appointment with id: %s not exist", appointment.getId())));
         if(userId.compareTo(appointmentModel.getDoctor().getId()) != 0
@@ -86,8 +87,9 @@ public class AppointmentAdapter implements IAppointmentAdapter {
         }
         appointmentModel.setNote(appointment.getNote());
         appointmentModel.setTime(appointment.getTime());
-        appointmentModel.setStatus(AppointmentStatus.valueOf(appointment.getStatus().toString()));
-        appointmentRepository.save(appointmentModel);
+//        appointmentModel.setStatus(AppointmentStatus.valueOf(appointment.getStatus().toString()));
+        AppointmentModel savedAppointment = appointmentRepository.save(appointmentModel);
+        return modelMapper.map(savedAppointment, Appointment.class);
     }
 
     @Override

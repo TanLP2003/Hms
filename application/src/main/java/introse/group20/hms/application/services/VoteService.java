@@ -38,8 +38,8 @@ public class VoteService implements IVoteService {
     }
 
     @Override
-    public void updateVote(UUID userId, Vote vote) throws BadRequestException {
-        iVoteAdapter.updateVoteAdapter(userId, vote);
+    public Vote updateVote(UUID userId, Vote vote) throws BadRequestException {
+        return iVoteAdapter.updateVoteAdapter(userId, vote);
     }
 
     @Override

@@ -11,6 +11,7 @@ import introse.group20.hms.infracstructure.repositories.IDoctorRepository;
 import introse.group20.hms.infracstructure.repositories.IMedicineRepository;
 import introse.group20.hms.infracstructure.repositories.IPatientRepository;
 import introse.group20.hms.infracstructure.repositories.IPrescriptionRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class PrescriptionAdapter implements IPrescriptionAdapter {
     private IMedicineRepository medicineRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    EntityManager entityManager;
 
     @Override
     public List<Prescription> getByPatientAdapter(UUID patientId, int pageNo, int pageSize) {
@@ -73,7 +76,7 @@ public class PrescriptionAdapter implements IPrescriptionAdapter {
     }
     @Transactional
     @Override
-    public void updatePrescriptionAdapter(UUID userId, Prescription prescription) throws BadRequestException {
+    public Prescription updatePrescriptionAdapter(UUID userId, Prescription prescription) throws BadRequestException {
         PrescriptionModel prescriptionModel = prescriptionRepository.findById(prescription.getId())
                 .orElseThrow(() -> new BadRequestException("Bad Request! Prescription not exist!"));
         if(userId.compareTo(prescriptionModel.getDoctor().getId()) != 0) {
@@ -92,7 +95,10 @@ public class PrescriptionAdapter implements IPrescriptionAdapter {
                     return medicineModel;
                 }).collect(Collectors.toList());
         prescriptionModel.getMedicines().addAll(newListMedicine);
-        prescriptionRepository.save(prescriptionModel);
+        entityManager.persist(prescriptionModel);
+        entityManager.flush();
+        PrescriptionModel updatedPres = prescriptionRepository.findById(prescription.getId()).get();
+        return modelMapper.map(updatedPres, Prescription.class);
     }
 
     @Override

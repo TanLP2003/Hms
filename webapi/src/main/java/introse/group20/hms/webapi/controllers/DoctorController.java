@@ -121,15 +121,16 @@ public class DoctorController {
     }
     @RequestMapping(path = "/api/doctors/{doctorId}", method = PUT, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Secured("ADMIN")
-    public ResponseEntity<HttpStatus> updateDoctor(@PathVariable UUID doctorId,@Valid @ModelAttribute DoctorRequest doctorRequest) throws IOException, BadRequestException {
+    @Transactional
+    public ResponseEntity<DoctorResponse> updateDoctor(@PathVariable UUID doctorId,@Valid @ModelAttribute DoctorRequest doctorRequest) throws IOException, BadRequestException {
         Doctor doctor = modelMapper.map(doctorRequest, Doctor.class);
         if(!doctorRequest.getImage().isEmpty()){
             String url = uploadService.upload(doctorRequest.getImage().getBytes(), doctorRequest.getImage().getOriginalFilename(), "avatars");
             doctor.setImage(url);
         }else doctor.setImage(null);
         doctor.setId(doctorId);
-        doctorService.updateDoctor(doctor);
-        return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+        Doctor updatedDoctor = doctorService.updateDoctor(doctor);
+        return new ResponseEntity<>(modelMapper.map(updatedDoctor, DoctorResponse.class), HttpStatus.ACCEPTED);
     }
 
 //    public ResponseEntity<HttpStatus> updateDoctorWithoutImg(@PathVariable UUID doctorId, @Valid @RequestBody )

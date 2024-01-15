@@ -37,8 +37,8 @@ public class SurgeryService implements ISurgeryService {
     }
 
     @Override
-    public void updateSurgery(Surgery surgery) throws BadRequestException {
-        surgeryAdapter.updateSurgeryAdapter(surgery);
+    public Surgery updateSurgery(Surgery surgery) throws BadRequestException {
+        return surgeryAdapter.updateSurgeryAdapter(surgery);
     }
 
     @Override

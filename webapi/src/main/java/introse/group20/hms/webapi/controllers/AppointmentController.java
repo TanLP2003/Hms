@@ -63,15 +63,15 @@ public class AppointmentController {
     }
 
     @PutMapping("/{appointmentId}")
-    @Secured({"DOCTOR", "PATIENT"})
-    public ResponseEntity<HttpStatus> updateAppointment(@PathVariable UUID appointmentId, @Valid @RequestBody AppointmentRequest apmRequest, @RequestParam String status) throws NotFoundException, BadRequestException {
-        AppointmentStatus apmStatus = AppointmentStatus.valueOf(status);
+    @Secured("PATIENT")
+    public ResponseEntity<AppointmentResponse> updateAppointment(@PathVariable UUID appointmentId, @Valid @RequestBody AppointmentRequest apmRequest) throws NotFoundException, BadRequestException {
+//        AppointmentStatus apmStatus = AppointmentStatus.valueOf(status);
         Appointment appointment = modelMapper.map(apmRequest, Appointment.class);
-        appointment.setStatus(apmStatus);
+//        appointment.setStatus(apmStatus);
         appointment.setId(appointmentId);
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
-        appointmentService.updateAppointment(userId, appointment);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Appointment updatedAppointment = appointmentService.updateAppointment(userId, appointment);
+        return new ResponseEntity<>(mapToApmResponse(updatedAppointment), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/accept/{appointmentId}")

@@ -119,14 +119,18 @@ public class DoctorAdapter implements IDoctorAdapter {
     }
 
     @Override
-    public void updateDoctorAdapter(Doctor doctor) throws BadRequestException {
+    @Transactional
+    public Doctor updateDoctorAdapter(Doctor doctor) throws BadRequestException {
         DoctorModel doctorModel = doctorRepository.findById(doctor.getId())
                 .orElseThrow(() -> new BadRequestException(String.format("Doctor with id: %s not exist", doctor.getId())));
         DoctorModel newDoctorModel = modelMapper.map(doctor, DoctorModel.class);
         if(doctor.getImage() == null){
             newDoctorModel.setImage(doctorModel.getImage());
         }
-        doctorRepository.save(newDoctorModel);
+        entityManager.merge(newDoctorModel);
+        entityManager.flush();
+        DoctorModel savedDoctor = doctorRepository.findById(doctor.getId()).get();
+        return doctorMapperInfra.mapToDoctor(savedDoctor);
     }
 
     @Override

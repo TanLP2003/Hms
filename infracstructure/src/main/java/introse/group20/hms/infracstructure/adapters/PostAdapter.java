@@ -108,7 +108,7 @@ public class PostAdapter implements IPostAdapter {
 
     @Override
     @Transactional
-    public void updatePostAdapter(UUID userId, Post post) throws NotFoundException, BadRequestException {
+    public Post updatePostAdapter(UUID userId, Post post) throws NotFoundException, BadRequestException {
         PostModel postModel = modelMapper.map(post, PostModel.class);
         Optional<PostModel> existPostModel = postRepository.findById(post.getId());
         if (existPostModel.isPresent()){
@@ -118,7 +118,10 @@ public class PostAdapter implements IPostAdapter {
             if (postModel.getCover() == null){
                 postModel.setCover(existPostModel.get().getCover());
             }
-            postRepository.save(postModel);
+            entityManager.merge(postModel);
+            entityManager.flush();
+            PostModel updatedPost = postRepository.findById(post.getId()).get();
+            return modelMapper.map(updatedPost, Post.class);
         }
         else throw new NotFoundException("Not found post with id " + post.getId());
 

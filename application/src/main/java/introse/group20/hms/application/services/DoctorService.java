@@ -53,8 +53,8 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
-    public void updateDoctor(Doctor doctor) throws BadRequestException {
-        doctorAdapter.updateDoctorAdapter(doctor);
+    public Doctor updateDoctor(Doctor doctor) throws BadRequestException {
+        return doctorAdapter.updateDoctorAdapter(doctor);
     }
 
     @Override

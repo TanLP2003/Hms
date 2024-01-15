@@ -80,7 +80,7 @@ public class MedicalRecordController {
 
     @PutMapping("/{medicalRecordId}")
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> updateMedicalRecord(@PathVariable UUID medicalRecordId,
+    public ResponseEntity<MedicalRecordResponse> updateMedicalRecord(@PathVariable UUID medicalRecordId,
                                                           @Valid @RequestBody MedicalRecordRequest request)
             throws BadRequestException {
         var typeMap =
@@ -97,8 +97,8 @@ public class MedicalRecordController {
         MedicalRecord medicalRecord = modelMapper.map(request, MedicalRecord.class);
         medicalRecord.setId(medicalRecordId);
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
-        medicalRecordService.updateMedicalRecord(userId, medicalRecord);
-        return new ResponseEntity<>(HttpStatus.OK);
+        MedicalRecord savedMR = medicalRecordService.updateMedicalRecord(userId, medicalRecord);
+        return new ResponseEntity<>(modelMapper.map(savedMR, MedicalRecordResponse.class), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("{id}")

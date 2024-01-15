@@ -70,7 +70,7 @@ public class VoteAdapter implements IVoteAdapter {
     }
 
     @Override
-    public void updateVoteAdapter(UUID userId, Vote vote) throws BadRequestException {
+    public Vote updateVoteAdapter(UUID userId, Vote vote) throws BadRequestException {
         Optional<VoteModel> voteModel = iVoteRepository.findById(vote.getId());
         if (voteModel.isEmpty()) {
             throw new BadRequestException("BAD REQUEST!");
@@ -81,7 +81,8 @@ public class VoteAdapter implements IVoteAdapter {
         }
         updatedVote.setRating(vote.getRating());
         updatedVote.setContent(vote.getContent());
-        iVoteRepository.save(updatedVote);
+        VoteModel saved = iVoteRepository.save(updatedVote);
+        return modelMapper.map(saved, Vote.class);
     }
 
     @Override

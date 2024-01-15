@@ -61,12 +61,12 @@ public class VoteController {
 
     @PutMapping("/api/votes/{voteId}")
     @Secured("PATIENT")
-    public ResponseEntity<HttpStatus> updateVote(@PathVariable UUID voteId, @Valid @RequestBody VoteRequest voteRequest) throws BadRequestException {
+    public ResponseEntity<VoteResponse> updateVote(@PathVariable UUID voteId, @Valid @RequestBody VoteRequest voteRequest) throws BadRequestException {
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         Vote vote = mapToEntity(voteRequest);
         vote.setId(voteId);
-        voteService.updateVote(userId, vote);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Vote updatedVote = voteService.updateVote(userId, vote);
+        return new ResponseEntity<>(mapToDTO(updatedVote), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/votes/{voteId}")

@@ -14,5 +14,5 @@ public interface IPatientService {
     Patient getPatientById(UUID id) throws NotFoundException;
     List<Patient> getPatientOfDoctor(UUID doctorId) throws NotFoundException;
     User addPatient(Patient patient);
-    void updatePatient(Patient patient) throws BadRequestException;
+    Patient updatePatient(Patient patient) throws BadRequestException;
 }

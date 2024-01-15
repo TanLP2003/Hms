@@ -83,7 +83,7 @@ public class MedicalRecordAdapter implements IMedicalRecordAdapter {
     }
 
     @Override
-    public void updateMedicalRecordAdapter(UUID userId, MedicalRecord medicalRecord) throws BadRequestException {
+    public MedicalRecord updateMedicalRecordAdapter(UUID userId, MedicalRecord medicalRecord) throws BadRequestException {
         Optional<MedicalRecordModel> medicalRecordModel = iMedicalRecordRepository.findById(medicalRecord.getId());
         if (medicalRecordModel.isEmpty()) {
             throw new BadRequestException("Bad request!");
@@ -104,7 +104,8 @@ public class MedicalRecordAdapter implements IMedicalRecordAdapter {
         updatedMedicalRecordModel.setTestResults(medicalRecord.getTestResults());
         updatedMedicalRecordModel.setHospitalDischargeStatus(medicalRecord.getHospitalDischargeStatus());
         updatedMedicalRecordModel.setStayType(StayType.valueOf(medicalRecord.getStayType().toString()));
-        iMedicalRecordRepository.save(updatedMedicalRecordModel);
+        MedicalRecordModel savedModel = iMedicalRecordRepository.save(updatedMedicalRecordModel);
+        return modelMapper.map(savedModel, MedicalRecord.class);
     }
 
     @Override

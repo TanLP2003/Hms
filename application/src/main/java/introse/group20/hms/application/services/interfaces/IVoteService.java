@@ -11,6 +11,6 @@ public interface IVoteService {
     List<Vote> getDoctorVote(UUID doctorId, int pageNo, int pageSize);
     Vote getById(UUID voteId) throws NotFoundException;
     Vote addVote(UUID patientId, UUID doctorId, Vote vote) throws BadRequestException;
-    void updateVote(UUID userId, Vote vote) throws BadRequestException;
+    Vote updateVote(UUID userId, Vote vote) throws BadRequestException;
     void deleteVote(UUID userId, UUID voteId) throws BadRequestException;
 }

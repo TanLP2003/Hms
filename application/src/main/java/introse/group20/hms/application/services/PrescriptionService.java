@@ -30,8 +30,8 @@ public class PrescriptionService implements IPrescriptionService {
     }
 
     @Override
-    public void updatePrescription(UUID userId, Prescription prescription) throws BadRequestException {
-        prescriptionAdapter.updatePrescriptionAdapter(userId, prescription);
+    public Prescription updatePrescription(UUID userId, Prescription prescription) throws BadRequestException {
+        return prescriptionAdapter.updatePrescriptionAdapter(userId, prescription);
     }
 
     @Override

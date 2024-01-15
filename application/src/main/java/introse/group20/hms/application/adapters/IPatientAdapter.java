@@ -15,5 +15,5 @@ public interface IPatientAdapter {
     Optional<Patient> getPatientByIdAdapter(UUID id);
     List<Patient> getPatientOfDoctorAdapter(UUID doctorId) throws NotFoundException;
     User addPatientAdapter(Patient patient);
-    void updatePatientAdapter(Patient patient) throws BadRequestException;
+    Patient updatePatientAdapter(Patient patient) throws BadRequestException;
 }
