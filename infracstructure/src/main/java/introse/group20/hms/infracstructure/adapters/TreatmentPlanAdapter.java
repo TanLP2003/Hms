@@ -108,11 +108,11 @@ public class TreatmentPlanAdapter implements ITreatmentPlanAdapter {
         }
         MedicalRecordModel medicalRecordModel = medicalRecordRepository.findById(treatmentPlanModel.getMedicalRecord().getId())
                 .orElseThrow(() -> new BadRequestException("Medical Record not exist"));
-//        medicalRecordModel.setTreatmentPlan(null);
+        medicalRecordModel.setTreatmentPlan(null);
 //        medicalRecordRepository.save(medicalRecordModel);
-        treatmentPlanModel.setMedicalRecord(null);
-        TreatmentPlanModel saved = treatmentPlanRepository.save(treatmentPlanModel);
-        entityManager.flush();
-        treatmentPlanRepository.delete(saved);
+//        treatmentPlanModel.setMedicalRecord(null);
+//        TreatmentPlanModel saved = treatmentPlanRepository.save(treatmentPlanModel);
+        entityManager.remove(treatmentPlanModel);
+//        treatmentPlanRepository.delete(saved);
     }
 }
