@@ -10,12 +10,14 @@ import introse.group20.hms.core.exceptions.ErrorMessage;
 import introse.group20.hms.core.exceptions.RefreshTokenException;
 import introse.group20.hms.webapi.DTOs.AuthDTO.*;
 import introse.group20.hms.webapi.security.impl.UserPrincipal;
+import introse.group20.hms.webapi.security.impl.UserPrincipalService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,6 +37,8 @@ public class AuthController {
     AuthenticationManager authenticationManager;
     @Autowired
     IUserService userService;
+    @Autowired
+    UserPrincipalService userPrincipalService;
     @Autowired
     IRefreshTokenService refreshTokenService;
     @Autowired
@@ -74,12 +78,15 @@ public class AuthController {
         return new ResponseEntity<MessageResponse>(new MessageResponse("Logout successfully!"), HttpStatus.OK);
     }
 
-    @PutMapping("/change_password")
+    @PutMapping("/api/change_password")
+    @Secured({"DOCTOR", "PATIENT"})
     public ResponseEntity<HttpStatus> changePassword(@Valid @RequestBody UpdatePasswordRequest request) throws BadRequestException {
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        UserPrincipal userPrincipal = userPrincipalService.loadUserByUserId(userId);
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(),request.getOldPassword())
+                new UsernamePasswordAuthenticationToken(userPrincipal.getUsername(), request.getOldPassword())
         );
-        userService.updatePassword(request.getUsername(), request.getNewPassword());
+        userService.updatePassword(userPrincipal.getUsername(), request.getNewPassword());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
