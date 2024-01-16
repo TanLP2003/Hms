@@ -87,7 +87,7 @@ public class AppointmentAdapter implements IAppointmentAdapter {
         }
         appointmentModel.setNote(appointment.getNote());
         appointmentModel.setTime(appointment.getTime());
-//        appointmentModel.setStatus(AppointmentStatus.valueOf(appointment.getStatus().toString()));
+        appointmentModel.setStatus(AppointmentStatus.valueOf(appointment.getStatus().toString()));
         AppointmentModel savedAppointment = appointmentRepository.save(appointmentModel);
         return modelMapper.map(savedAppointment, Appointment.class);
     }

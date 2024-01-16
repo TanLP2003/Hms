@@ -69,6 +69,7 @@ public class AppointmentController {
         Appointment appointment = modelMapper.map(apmRequest, Appointment.class);
 //        appointment.setStatus(apmStatus);
         appointment.setId(appointmentId);
+        appointment.setStatus(AppointmentStatus.PENDING);
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         Appointment updatedAppointment = appointmentService.updateAppointment(userId, appointment);
         return new ResponseEntity<>(mapToApmResponse(updatedAppointment), HttpStatus.ACCEPTED);
@@ -76,22 +77,28 @@ public class AppointmentController {
 
     @PutMapping("/accept/{appointmentId}")
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> acceptAppointment(@PathVariable UUID appointmentId) throws NotFoundException, BadRequestException {
+    public ResponseEntity<AppointmentResponse> acceptAppointment(@PathVariable UUID appointmentId) throws NotFoundException, BadRequestException {
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         Appointment appointment = appointmentService.getById(appointmentId);
+        if(appointment.getStatus() != AppointmentStatus.PENDING){
+            throw new BadRequestException("Action not allowed!");
+        }
         appointment.setStatus(AppointmentStatus.ACCEPT);
-        appointmentService.updateAppointment(userId, appointment);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Appointment updatedAppointment = appointmentService.updateAppointment(userId, appointment);
+        return new ResponseEntity<>(mapToApmResponse(updatedAppointment), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/reject/{appointmentId}")
     @Secured("DOCTOR")
-    public ResponseEntity<HttpStatus> rejectAppointment(@PathVariable UUID appointmentId) throws NotFoundException, BadRequestException {
+    public ResponseEntity<AppointmentResponse> rejectAppointment(@PathVariable UUID appointmentId) throws NotFoundException, BadRequestException {
         UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
         Appointment appointment = appointmentService.getById(appointmentId);
+        if(appointment.getStatus() != AppointmentStatus.PENDING){
+            throw new BadRequestException("Action not allowed!");
+        }
         appointment.setStatus(AppointmentStatus.REJECT);
-        appointmentService.updateAppointment(userId, appointment);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Appointment updatedAppointment = appointmentService.updateAppointment(userId, appointment);
+        return new ResponseEntity<>(mapToApmResponse(updatedAppointment), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{appointmentId}")
