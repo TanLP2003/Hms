@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IDepartmentAdapter {
-    List<Department> getAllAdapter();
+    List<Department> getAllAdapter(int pageNo, int pageSize);
     Department addDepartmentAdapter(Department department);
     void deleteDepartmentAdapter(UUID id) throws BadRequestException;
 }

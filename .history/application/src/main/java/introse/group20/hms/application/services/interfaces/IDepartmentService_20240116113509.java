@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IDepartmentService {
-    List<Department> getAll();
+    List<Department> getAll(int pageNo, int pageSize);
     Department addDepartment(Department department);
     void deleteDepartment(UUID id) throws BadRequestException;
 }

@@ -22,8 +22,9 @@ public class DepartmentAdapter implements IDepartmentAdapter {
     @Autowired
     ModelMapper modelMapper;
     @Override
-    public List<Department> getAllAdapter() {
-        return departmentRepository.findAll().stream()
+    public List<Department> getAllAdapter(int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        return departmentRepository.findAll(pageRequest).stream()
                 .map(departmentModel -> modelMapper.map(departmentModel, Department.class))
                 .collect(Collectors.toList());
     }

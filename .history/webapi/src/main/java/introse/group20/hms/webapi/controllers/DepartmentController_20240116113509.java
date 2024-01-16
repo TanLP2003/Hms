@@ -25,9 +25,11 @@ public class DepartmentController {
     ModelMapper modelMapper;
 
     @GetMapping("/departments")
-    public ResponseEntity<List<DepartmentResponse>> getAll()
-    {
-        List<DepartmentResponse> response = departmentService.getAll().stream()
+    public ResponseEntity<List<DepartmentResponse>> getAll(
+            @RequestParam(defaultValue = "1")int pageNo,
+            @RequestParam(defaultValue = "10")int pageSize
+    ){
+        List<DepartmentResponse> response = departmentService.getAll(pageNo - 1,pageSize).stream()
                 .map(department -> modelMapper.map(department, DepartmentResponse.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
