@@ -97,4 +97,12 @@ public class TreatmentPlanController {
                 treatmentPlan.getMedicalRecordId()
         );
     }
+
+    public ResponseEntity<TreatmentPlanResponse> updatetreatmentPlan(@PathVariable UUID id, @Valid @RequestBody TreatmentPlanRequest request) throws BadRequestException {
+        TreatmentPlan treatmentPlan = modelMapper.map(request, TreatmentPlan.class);
+        treatmentPlan.setId(id);
+        UUID userId = AuthExtensions.GetUserIdFromContext(SecurityContextHolder.getContext());
+        TreatmentPlan savedTP = treatmentPlanService.updateTreatmentPlan(userId, treatmentPlan);
+        return new ResponseEntity<>(mapToTreatmentPlanResponse(savedTP), HttpStatus.ACCEPTED);
+    }
 }
