@@ -16,8 +16,8 @@ public class DepartmentService implements IDepartmentService {
         this.departmentAdapter = departmentAdapter;
     }
     @Override
-    public List<Department> getAll() {
-        return departmentAdapter.getAllAdapter();
+    public List<Department> getAll(int pageNo, int pageSize) {
+        return departmentAdapter.getAllAdapter(pageNo, pageSize);
     }
 
     @Override
