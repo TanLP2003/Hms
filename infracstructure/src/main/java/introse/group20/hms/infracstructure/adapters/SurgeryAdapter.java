@@ -50,10 +50,14 @@ public class SurgeryAdapter implements ISurgeryAdapter {
         int currentYear = now.getYear();
         return surgeryModels.stream()
                 .filter(surgeryModel -> {
-                    LocalDateTime surgeryDateTime = LocalDateTime.ofInstant(surgeryModel.getTime().toInstant(), ZoneId.systemDefault());
-                    int surgeryWeek = surgeryDateTime.get((WeekFields.of(Locale.getDefault()).weekOfYear()));
-                    int surgeryYear = surgeryDateTime.getYear();
-                    return currentWeek == surgeryWeek && currentYear == surgeryYear;
+                    LocalDateTime surgeryDateTime = LocalDateTime.ofInstant(surgeryModel.getTime().toInstant(), ZoneId.systemDefault())
+                            .atZone(ZoneId.systemDefault())
+                            .withZoneSameInstant(ZoneId.of("Asia/Ho_Chi_Minh"))
+                            .toLocalDateTime();
+//                    int surgeryWeek = surgeryDateTime.get((WeekFields.of(Locale.getDefault()).weekOfYear()));
+//                    int surgeryYear = surgeryDateTime.getYear();
+//                    return currentWeek == surgeryWeek && currentYear == surgeryYear;
+                    return surgeryDateTime.isAfter(now) && surgeryDateTime.isBefore(now.plusDays(7));
                 })
                 .sorted(Comparator.comparing(SurgeryModel::getTime))
                 .map(surgeryModel -> modelMapper.map(surgeryModel, Surgery.class))
